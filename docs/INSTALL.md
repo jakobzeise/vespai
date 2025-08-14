@@ -25,6 +25,12 @@ cd ~
 git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
+# Install Git LFS to download model files properly
+sudo apt update
+sudo apt install git-lfs
+git lfs install
+git lfs pull
+
 # Make setup script executable and run
 chmod +x scripts/raspberry-pi-setup.sh
 ./scripts/raspberry-pi-setup.sh
@@ -139,8 +145,8 @@ The system requires the specialized hornet detection model:
 mkdir -p models/yolov5-params
 
 # Download VespAI hornet model (14MB)
-curl -L -o models/yolov5-params/yolov5s-all-data.pt \
-  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+curl -L -o models/yolov5s-all-data.pt \
+  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5s-all-data.pt"
 ```
 
 ### 3. Create Directory Structure
@@ -162,7 +168,7 @@ cp .env.template .env
 2. **Edit configuration (optional):**
 ```bash
 # .env file contents
-MODEL_PATH=models/yolov5-params/yolov5s-all-data.pt
+MODEL_PATH=models/yolov5s-all-data.pt
 CONFIDENCE_THRESHOLD=0.8
 
 # Camera Settings
@@ -310,11 +316,11 @@ python scripts/setup.py
 **"Model not found" error:**
 ```bash
 # Check model exists
-ls -la models/yolov5-params/yolov5s-all-data.pt
+ls -la models/yolov5s-all-data.pt
 
 # Re-download if missing
-curl -L -o models/yolov5-params/yolov5s-all-data.pt \
-  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+curl -L -o models/yolov5s-all-data.pt \
+  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5s-all-data.pt"
 ```
 
 **Camera not detected:**

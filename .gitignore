@@ -59,8 +59,8 @@ detections/
 *.mp4
 *.avi
 
-# Model weights - now tracked with Git LFS
-# All models are included for deployment
+# Model weights - now tracked with Git LFS  
+# All models in models/ directory are included for deployment
 
 # Logs
 *.log

@@ -67,8 +67,8 @@ pip install -r requirements.txt
 mkdir -p models/yolov5-params logs monitor/detections
 
 # Download VespAI hornet model (14MB)
-curl -L -o models/yolov5-params/yolov5s-all-data.pt \
-  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+curl -L -o models/yolov5s-all-data.pt \
+  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5s-all-data.pt"
 
 # Configure environment (optional)
 cp .env.template .env
@@ -263,6 +263,10 @@ sudo apt install python3-full python3-pip python3-opencv git
 cd ~
 git clone https://github.com/jakobzeise/vespai.git
 cd vespai
+
+# Install Git LFS for model files
+sudo apt update && sudo apt install git-lfs
+git lfs install && git lfs pull
 
 # One-line setup (handles virtual environment)
 chmod +x scripts/raspberry-pi-setup.sh

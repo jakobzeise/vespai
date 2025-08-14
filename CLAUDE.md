@@ -90,8 +90,8 @@ The application requires:
 ## Model Requirements
 
 The system expects YOLOv5 model weights at:
-- Primary: `/opt/vespai/models/yolov5-params/yolov5s-all-data.pt`
-- Fallbacks: `yolov5s.pt`, `models/yolov5s.pt`, or `yolov5s-all-data.pt`
+- Primary: `/opt/vespai/models/yolov5s-all-data.pt`
+- Fallbacks: `models/yolov5s-all-data.pt`, `yolov5s.pt`, `models/yolov5s.pt`
 
 The model should be trained to detect:
 - Class 0: Vespa crabro (European hornet)

@@ -47,7 +47,7 @@ sudo apt update
 
 # Install system dependencies
 echo "🔧 Installing system dependencies..."
-sudo apt install -y python3-full python3-pip python3-opencv git curl
+sudo apt install -y python3-full python3-pip python3-opencv git git-lfs curl
 
 # Check if virtual environment exists
 if [ ! -d "vespai-env" ]; then
@@ -57,6 +57,11 @@ if [ ! -d "vespai-env" ]; then
 else
     echo "✅ Virtual environment already exists"
 fi
+
+# Initialize Git LFS and download model files
+echo "📥 Setting up Git LFS for model files..."
+git lfs install
+git lfs pull
 
 # Activate virtual environment
 echo "🔄 Activating virtual environment..."
