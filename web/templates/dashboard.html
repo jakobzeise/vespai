@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>VespAI Monitor - Live Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -91,7 +95,12 @@
                         </button>
                     </div>
                 </div>
-                <img src="/video_feed" alt="Live Feed" class="video-feed" id="video-feed">
+                <div class="video-wrapper">
+                    <img src="/current_frame.jpg?t={{ timestamp_ms }}" alt="Live Feed" class="video-feed" id="video-feed">
+                    <div class="video-status" id="video-status" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #0f0; padding: 5px 10px; border-radius: 4px; font-size: 12px;">
+                        Live (Auto-refresh: 3s)
+                    </div>
+                </div>
             </div>
 
             <!-- Detection Log -->

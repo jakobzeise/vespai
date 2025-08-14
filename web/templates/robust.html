@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VespAI - Live Feed</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            background: #000; 
+            color: #fff; 
+            font-family: monospace;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timestamp {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #0f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #0f0;
+        }
+        .info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #0f0;
+            color: #000;
+            border-radius: 3px;
+            margin-left: 10px;
+        }
+        .status.error {
+            background: #f00;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timestamp">
+            VespAI Live Feed - <span id="time"></span>
+            <span class="status" id="status">Loading</span>
+        </div>
+        <img src="/current_frame.jpg" alt="Live Camera Feed" id="camera">
+        <div class="info">
+            Updates: <span id="counter">0</span> | 
+            Last: <span id="last">Never</span>
+        </div>
+    </div>
+    
+    <script>
+        let counter = 0;
+        let updateInterval = null;
+        
+        function updateImage() {
+            const img = document.getElementById('camera');
+            const timestamp = Date.now();
+            
+            // Direct update - no preloading, no visibility checks
+            img.src = '/current_frame.jpg?t=' + timestamp;
+            
+            counter++;
+            document.getElementById('counter').textContent = counter;
+            document.getElementById('last').textContent = new Date().toLocaleTimeString();
+            document.getElementById('status').textContent = 'Live';
+            document.getElementById('status').className = 'status';
+        }
+        
+        function updateTime() {
+            document.getElementById('time').textContent = new Date().toLocaleTimeString();
+        }
+        
+        function startUpdates() {
+            // Clear any existing interval
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+            
+            // Start fresh interval
+            updateInterval = setInterval(updateImage, 1000);
+            setInterval(updateTime, 1000);
+            
+            // Initial update
+            updateImage();
+            updateTime();
+        }
+        
+        // Start updates on load
+        startUpdates();
+        
+        // Restart updates on any visibility change or focus
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                updateImage(); // Immediate update when visible
+            }
+        });
+        
+        window.addEventListener('focus', function() {
+            updateImage(); // Immediate update on focus
+        });
+        
+        // Also restart on page show (handles back/forward cache)
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                startUpdates();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -4,7 +4,7 @@ Flask Web Application for VespAI
 import threading
 from flask import Flask
 from config.settings import config
-from utils.stats import StatsManager
+from vespai_utils.stats import StatsManager
 
 # Global variables for web interface
 web_frame = None

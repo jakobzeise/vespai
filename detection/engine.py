@@ -48,6 +48,15 @@ class DetectionEngine:
             
         if hasattr(self.model, 'names'):
             logger.info(f"Model classes: {self.model.names}")
+            
+            # Check if this is a proper hornet detection model
+            expected_classes = {'velutina', 'crabro', 'vespa_velutina', 'vespa_crabro'}
+            model_classes = set(str(v).lower() for v in self.model.names.values())
+            
+            if not any(cls in model_classes for cls in expected_classes):
+                logger.warning(f"⚠️ Model does not appear to contain hornet classes!")
+                logger.warning(f"⚠️ Expected: velutina/crabro, Found: {list(self.model.names.values())[:5]}...")
+                logger.warning(f"⚠️ This model will produce false detections - use proper hornet model")
         
         logger.info("✓ YOLOv5 model loaded successfully")
     
@@ -70,18 +79,59 @@ class DetectionEngine:
         """Try different YOLOv5 loading methods"""
         model = None
         
-        # Method 1: Try yolov5 package
+        # Method 1: Try torch.hub with proper error handling for DetectMultiBackend
+        try:
+            import torch
+            import warnings
+            
+            # Suppress specific warnings during model loading
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message=".*DetectMultiBackend.*")
+                warnings.filterwarnings("ignore", message=".*__module__.*")
+                
+                # Try torch.hub load first with proper parameters
+                model = torch.hub.load(
+                    'ultralytics/yolov5', 'custom',
+                    path=self.model_path,
+                    device='cpu',
+                    force_reload=False,
+                    trust_repo=True,
+                    verbose=False
+                )
+                logger.info("Model loaded via torch.hub")
+                return model
+                
+        except Exception as e:
+            logger.warning(f"torch.hub loading failed: {e}")
+        
+        # Method 2: Try yolov5 package with safe loading fix
         try:
             import yolov5
+            # Fix for PyTorch 2.6 weights_only issue
+            import torch
+            torch.serialization.add_safe_globals(['models.yolo.Model'])
             model = yolov5.load(self.model_path, device='cpu')
             logger.info("Model loaded via yolov5 package")
             return model
         except ImportError:
-            logger.info("yolov5 package not found, trying torch.hub...")
+            logger.info("yolov5 package not found, trying alternative methods...")
         except Exception as e:
             logger.warning(f"yolov5 package loading failed: {e}")
+            # Try loading with weights_only=False as fallback
+            try:
+                import torch
+                # Monkey patch torch.load to use weights_only=False
+                original_load = torch.load
+                torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
+                import yolov5
+                model = yolov5.load(self.model_path, device='cpu')
+                torch.load = original_load  # Restore original function
+                logger.info("Model loaded via yolov5 package (fallback method)")
+                return model
+            except Exception as e2:
+                logger.warning(f"yolov5 fallback loading also failed: {e2}")
         
-        # Method 2: Try local YOLOv5 directory
+        # Method 3: Try local YOLOv5 directory
         yolo_dir = os.path.join(os.path.dirname(self.model_path), "yolov5")
         if os.path.exists(yolo_dir):
             sys.path.insert(0, yolo_dir)
@@ -98,8 +148,11 @@ class DetectionEngine:
             except Exception as e:
                 logger.warning(f"Local YOLOv5 loading failed: {e}")
         
-        # Method 3: Download from GitHub
+        # Method 4: Download from GitHub with weights_only fix (legacy fallback)
         try:
+            # Fix for PyTorch 2.6 weights_only issue
+            import torch
+            torch.serialization.add_safe_globals(['models.yolo.Model'])
             model = torch.hub.load(
                 'ultralytics/yolov5', 'custom',
                 path=self.model_path,
@@ -112,6 +165,23 @@ class DetectionEngine:
             return model
         except Exception as e:
             logger.error(f"GitHub YOLOv5 loading failed: {e}")
+            # Try with weights_only=False fallback
+            try:
+                original_load = torch.load
+                torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
+                model = torch.hub.load(
+                    'ultralytics/yolov5', 'custom',
+                    path=self.model_path,
+                    force_reload=True,
+                    trust_repo=True,
+                    skip_validation=True,
+                    _verbose=False
+                )
+                torch.load = original_load  # Restore original function
+                logger.info("Model loaded from GitHub (fallback method)")
+                return model
+            except Exception as e2:
+                logger.error(f"GitHub YOLOv5 fallback loading also failed: {e2}")
         
         return None
     
@@ -178,10 +248,22 @@ class DetectionEngine:
         }
         
         if len(results.pred[0]) > 0:
+            # Check if model has proper hornet classes
+            has_hornet_classes = False
+            if hasattr(self.model, 'names'):
+                model_classes = set(str(v).lower() for v in self.model.names.values())
+                expected_classes = {'velutina', 'crabro', 'vespa_velutina', 'vespa_crabro'}
+                has_hornet_classes = any(cls in model_classes for cls in expected_classes)
+            
             for pred in results.pred[0]:
                 x1, y1, x2, y2, conf, cls = pred
                 cls = int(cls)
                 confidence = float(conf)
+                
+                if not has_hornet_classes:
+                    # Generic model - skip all detections to prevent false alerts
+                    logger.debug(f"Skipping detection (generic model): class {cls}, confidence: {confidence:.2f}")
+                    continue
                 
                 detections['confidences'].append(confidence)
                 

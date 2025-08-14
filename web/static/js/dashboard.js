@@ -273,6 +273,37 @@ function showDetectionFrame(frameId) {
     }
 }
 
+// Simple and reliable video streaming - no complex classes needed
+
+// Ultra-simple direct image refresh - same as /simple page
+function startVideoPolling() {
+    const imgElement = document.getElementById('video-feed');
+    
+    if (!imgElement) {
+        console.error('Video feed element not found');
+        return;
+    }
+    
+    console.log('Using ultra-simple direct refresh approach');
+    
+    // Direct image source update every 1 second with cache-busting timestamp
+    setInterval(() => {
+        imgElement.src = `/current_frame.jpg?t=${Date.now()}`;
+    }, 1000);
+    
+    updateVideoStatus('Live (Direct)', '#0f0');
+}
+
+function updateVideoStatus(message, color) {
+    const statusElement = document.getElementById('video-status');
+    if (statusElement) {
+        statusElement.textContent = message;
+        statusElement.style.color = color;
+    }
+}
+
+// Clean, simple video management - no unused functions
+
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
     // Start time updates
@@ -283,5 +314,10 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(updateStats, 2000);
     updateStats();
     
-    console.log('VespAI Dashboard initialized');
+    // Start ultra-simple video polling after page loads
+    setTimeout(() => {
+        startVideoPolling();
+    }, 1000);
+    
+    console.log('VespAI Dashboard initialized with proven video approach');
 });

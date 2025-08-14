@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="2">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>VespAI - Simple View</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            background: #000; 
+            color: #fff; 
+            font-family: monospace;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timestamp {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #0f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #0f0;
+        }
+        .info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timestamp">VespAI Live Feed - {{ timestamp }}</div>
+        <img src="/current_frame.jpg?nocache={{ timestamp_ms }}" alt="Live Camera Feed">
+        <div class="info">
+            Page auto-refreshes every 2 seconds<br>
+            Frame ID: {{ frame_id }} | FPS: {{ fps }}
+        </div>
+    </div>
+</body>
+</html>

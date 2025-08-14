@@ -20,7 +20,7 @@ class Config:
     # Web Server Configuration
     DOMAIN_NAME = os.getenv("DOMAIN_NAME", "localhost")
     USE_HTTPS = os.getenv("USE_HTTPS", "false").lower() == "true"
-    WEB_PORT = int(os.getenv("WEB_PORT", "5000"))
+    WEB_PORT = int(os.getenv("WEB_PORT", "8081"))
     
     # Detection Configuration
     CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.8"))
@@ -28,7 +28,7 @@ class Config:
     SAVE_DIRECTORY = os.getenv("SAVE_DIRECTORY", "monitor/detections")
     
     # Camera Configuration
-    CAMERA_RESOLUTION = os.getenv("CAMERA_RESOLUTION", "1920x1080")
+    CAMERA_RESOLUTION = os.getenv("CAMERA_RESOLUTION", "1280x720")
     CAMERA_FPS = int(os.getenv("CAMERA_FPS", "30"))
     
     # Model Configuration
