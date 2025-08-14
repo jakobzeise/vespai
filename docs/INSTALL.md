@@ -7,7 +7,7 @@
 ### Standard Systems (Windows, macOS, Linux)
 ```bash
 # Clone repository
-git clone https://github.com/andrw3000/vespai.git
+git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # Run automated setup
@@ -21,7 +21,7 @@ python main.py --web
 ```bash
 # Clone repository to home directory (recommended for permissions)
 cd ~
-git clone https://github.com/andrw3000/vespai.git
+git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # Create virtual environment (required on modern Raspberry Pi OS)
@@ -74,7 +74,7 @@ python scripts/setup.py
 ```bash
 # Clone to home directory first (recommended for permissions)
 cd ~
-git clone https://github.com/andrw3000/vespai.git
+git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # Create virtual environment
@@ -113,7 +113,7 @@ pip install -r requirements.txt
 ```bash
 # Clone to home directory (recommended for permissions)
 cd ~
-git clone https://github.com/andrw3000/vespai.git
+git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # Create virtual environment
@@ -139,7 +139,7 @@ mkdir -p models/yolov5-params
 
 # Download VespAI hornet model (14MB)
 curl -L -o models/yolov5-params/yolov5s-all-data.pt \
-  "https://github.com/andrw3000/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
 ```
 
 ### 3. Create Directory Structure
@@ -313,7 +313,7 @@ ls -la models/yolov5-params/yolov5s-all-data.pt
 
 # Re-download if missing
 curl -L -o models/yolov5-params/yolov5s-all-data.pt \
-  "https://github.com/andrw3000/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
 ```
 
 **Camera not detected:**

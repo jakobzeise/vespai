@@ -45,7 +45,7 @@ python main.py --web
 ```bash
 # Clone to home directory (recommended for permissions)
 cd ~
-git clone https://github.com/andrw3000/vespai.git
+git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # Create and activate virtual environment
@@ -67,7 +67,7 @@ mkdir -p models/yolov5-params logs monitor/detections
 
 # Download VespAI hornet model (14MB)
 curl -L -o models/yolov5-params/yolov5s-all-data.pt \
-  "https://github.com/andrw3000/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+  "https://github.com/jakobzeise/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
 
 # Configure environment (optional)
 cp .env.template .env
@@ -260,7 +260,7 @@ sudo apt install python3-full python3-pip python3-opencv git
 
 # Clone repository to home directory (recommended for permissions)
 cd ~
-git clone https://github.com/andrw3000/vespai.git
+git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # One-line setup (handles virtual environment)

@@ -11,12 +11,12 @@ echo "=============================="
 if [[ "$PWD" == "/vespai" ]] || [[ "$PWD" =~ ^/[^/]*$ ]]; then
     echo "⚠️  Warning: Running from system directory ($PWD)"
     echo "   For best results, clone to your home directory:"
-    echo "   cd ~ && git clone https://github.com/andrw3000/vespai.git"
+    echo "   cd ~ && git clone https://github.com/jakobzeise/vespai.git"
     echo "   This avoids Git permission issues."
     read -p "Continue anyway? (y/N): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "💡 Recommended: cd ~ && git clone https://github.com/andrw3000/vespai.git"
+        echo "💡 Recommended: cd ~ && git clone https://github.com/jakobzeise/vespai.git"
         exit 1
     fi
 fi
