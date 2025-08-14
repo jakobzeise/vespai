@@ -4,12 +4,28 @@
 
 ## 🚀 Quick Start
 
-For the fastest setup on any system (Windows, macOS, Linux, Raspberry Pi):
-
+### Standard Systems (Windows, macOS, Linux)
 ```bash
 # Clone repository
 git clone https://github.com/andrw3000/vespai.git
 cd vespai
+
+# Run automated setup
+python scripts/setup.py
+
+# Start the system
+python main.py --web
+```
+
+### Raspberry Pi (PEP 668 Compatible)
+```bash
+# Clone repository
+git clone https://github.com/andrw3000/vespai.git
+cd vespai
+
+# Create virtual environment (required on modern Raspberry Pi OS)
+python3 -m venv vespai-env
+source vespai-env/bin/activate
 
 # Run automated setup
 python scripts/setup.py
@@ -47,19 +63,29 @@ Open http://localhost:8081 in your browser.
 
 The setup script handles everything automatically:
 
+**Standard Systems:**
 ```bash
 cd vespai
 python scripts/setup.py
 ```
 
+**Raspberry Pi (requires virtual environment):**
+```bash
+cd vespai
+python3 -m venv vespai-env
+source vespai-env/bin/activate
+python scripts/setup.py
+```
+
 **What it does:**
+- ✅ Detects PEP 668 and creates virtual environment if needed
 - ✅ Verifies Python version compatibility
 - ✅ Installs all required Python packages
 - ✅ Downloads VespAI hornet detection model (14MB)
 - ✅ Creates necessary directories
 - ✅ Sets up configuration templates
 - ✅ Tests camera availability
-- ✅ Provides next steps
+- ✅ Provides virtual environment activation instructions
 
 **For all models (optional):**
 ```bash
@@ -72,7 +98,15 @@ If you prefer manual setup or need custom configuration:
 
 ### 1. Install Python Dependencies
 
+**Standard Systems:**
 ```bash
+pip install -r requirements.txt
+```
+
+**Raspberry Pi (create virtual environment first):**
+```bash
+python3 -m venv vespai-env
+source vespai-env/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -160,6 +194,7 @@ CONFIDENCE_THRESHOLD=0.7    # Lower for better detection
 
 ### Basic Usage
 
+**Standard Systems:**
 ```bash
 # Start with web dashboard
 python main.py --web
@@ -172,6 +207,18 @@ python main.py --web --video hornets.mp4
 
 # Save all detection images
 python main.py --web --save
+```
+
+**Raspberry Pi (activate virtual environment first):**
+```bash
+# Activate virtual environment
+source vespai-env/bin/activate
+
+# Start with web dashboard (optimized for Pi)
+python main.py --web --resolution 720p --motion
+
+# Performance mode
+python main.py --web --resolution 640x480 --motion --conf 0.7
 ```
 
 ### Command Line Options

@@ -78,19 +78,74 @@ class VespAISetup:
         return True
     
     def install_requirements(self):
-        """Install Python dependencies"""
+        """Install Python dependencies with virtual environment support"""
         logger.info("Installing Python dependencies...")
         if not self.requirements_file.exists():
             logger.error("requirements.txt not found!")
             return False
         
+        # Check if we're in a virtual environment or need to create one
+        venv_path = self.project_root / "venv"
+        python_cmd = sys.executable
+        pip_cmd = [sys.executable, "-m", "pip"]
+        
+        # Check if system requires virtual environment (PEP 668)
+        test_result = subprocess.run(
+            [sys.executable, "-m", "pip", "install", "--dry-run", "setuptools"],
+            capture_output=True, text=True
+        )
+        
+        needs_venv = "externally-managed-environment" in test_result.stderr.lower()
+        
+        if needs_venv and not hasattr(sys, 'real_prefix') and not (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
+            logger.info("System requires virtual environment (PEP 668)")
+            logger.info("Creating virtual environment...")
+            
+            # Create virtual environment
+            try:
+                subprocess.run([sys.executable, "-m", "venv", str(venv_path)], check=True)
+                logger.info("Virtual environment created at: %s", venv_path)
+                
+                # Update python and pip commands for venv
+                if platform.system() == 'Windows':
+                    python_cmd = str(venv_path / "Scripts" / "python.exe")
+                    pip_cmd = [python_cmd, "-m", "pip"]
+                else:
+                    python_cmd = str(venv_path / "bin" / "python")
+                    pip_cmd = [python_cmd, "-m", "pip"]
+                    
+            except subprocess.CalledProcessError as e:
+                logger.error("Failed to create virtual environment: %s", e)
+                logger.info("Trying with --break-system-packages as fallback...")
+                pip_cmd = [sys.executable, "-m", "pip", "--break-system-packages"]
+        
         try:
-            cmd = [sys.executable, "-m", "pip", "install", "-r", str(self.requirements_file)]
+            cmd = pip_cmd + ["install", "-r", str(self.requirements_file)]
             result = subprocess.run(cmd, check=True, capture_output=True, text=True)
             logger.info("Dependencies installed successfully ✓")
+            
+            # If we created a venv, provide activation instructions
+            if venv_path.exists():
+                logger.info("")
+                logger.info("🔧 Virtual environment created!")
+                if platform.system() == 'Windows':
+                    logger.info("To activate: %s\\Scripts\\activate", venv_path)
+                    logger.info("To run VespAI: %s\\Scripts\\python main.py --web", venv_path)
+                else:
+                    logger.info("To activate: source %s/bin/activate", venv_path)
+                    logger.info("To run VespAI: %s/bin/python main.py --web", venv_path)
+                logger.info("")
+            
             return True
         except subprocess.CalledProcessError as e:
             logger.error("Failed to install dependencies: %s", e.stderr)
+            if "externally-managed-environment" in e.stderr:
+                logger.info("")
+                logger.info("💡 Raspberry Pi users: Run this setup from within a virtual environment:")
+                logger.info("   python3 -m venv vespai-env")
+                logger.info("   source vespai-env/bin/activate")
+                logger.info("   python scripts/setup.py")
+                logger.info("")
             return False
     
     def create_directories(self):

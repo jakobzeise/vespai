@@ -27,13 +27,29 @@ quick-start.bat
 ./quick-start.sh
 ```
 
-### Option 2: Automated Setup (Recommended)
+**Raspberry Pi (PEP 668 compatible):**
+```bash
+./scripts/raspberry-pi-setup.sh
+```
+
+### Option 2: Automated Setup
+
+**Standard Systems:**
 ```bash
 # Automated setup handles everything
 python scripts/setup.py
-
-# Start the system
 python main.py --web
+```
+
+**Raspberry Pi (requires virtual environment):**
+```bash
+# Create and activate virtual environment
+python3 -m venv vespai-env
+source vespai-env/bin/activate
+
+# Setup and run
+python scripts/setup.py
+python main.py --web --resolution 720p --motion
 ```
 
 ### Option 3: Manual Setup
@@ -233,19 +249,25 @@ python main.py --web --resolution 720p
 
 ### Raspberry Pi Setup
 ```bash
-# System preparation
+# System preparation  
 sudo apt update && sudo apt upgrade -y
-sudo apt install python3-pip python3-opencv git
+sudo apt install python3-full python3-pip python3-opencv git
 
-# Clone and setup
+# Clone repository
 git clone https://github.com/andrw3000/vespai.git
 cd vespai
+
+# One-line setup (handles virtual environment)
+./scripts/raspberry-pi-setup.sh
+
+# Or manual setup with virtual environment
+python3 -m venv vespai-env
+source vespai-env/bin/activate
 python scripts/setup.py
 
-# Test system
+# Run VespAI (remember to activate venv first)
+source vespai-env/bin/activate
 python main.py --web --resolution 720p --motion
-
-# Configure systemd service (see docs/INSTALL.md for details)
 ```
 
 ### Security Considerations
