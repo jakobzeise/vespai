@@ -184,18 +184,26 @@ def register_routes(app, stats, hourly_detections, web_frame, web_lock):
         response_data = dict(stats)
         response_data["hourly_data"] = hourly_data
         
+        # Add missing fields with defaults if not present
+        response_data.setdefault("sms_sent", 0)
+        response_data.setdefault("sms_cost", 0.0)
+        response_data.setdefault("saved_images", 0)
+        response_data.setdefault("last_sms_time", None)
+        
         # Convert deque to list for JSON serialization
-        response_data["detection_log"] = list(response_data["detection_log"])
+        if "detection_log" in response_data:
+            response_data["detection_log"] = list(response_data["detection_log"])
         if "hourly_stats" in response_data:
             response_data["hourly_stats"] = list(response_data["hourly_stats"])
         
         # Format timestamps
-        if response_data["last_detection_time"]:
+        if response_data.get("last_detection_time"):
             response_data["last_detection_time"] = response_data["last_detection_time"].strftime("%H:%M:%S")
-        if response_data["last_sms_time"]:
+        if response_data.get("last_sms_time"):
             response_data["last_sms_time"] = response_data["last_sms_time"].strftime("%H:%M:%S")
             
-        response_data["start_time"] = response_data["start_time"].strftime("%H:%M:%S")
+        if response_data.get("start_time"):
+            response_data["start_time"] = response_data["start_time"].strftime("%H:%M:%S")
 
         return jsonify(response_data)
 
