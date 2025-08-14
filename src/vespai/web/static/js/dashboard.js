@@ -7,50 +7,53 @@ let cursor = null;
 // Initialize custom cursor
 document.addEventListener('DOMContentLoaded', function() {
     console.log('VespAI Dashboard: Initializing custom orange neon cursor...');
-    // Create cursor element
-    cursor = document.createElement('div');
-    cursor.style.cssText = `
-        position: fixed;
-        width: 16px;
-        height: 16px;
-        background: #ff6600;
-        border: 2px solid #ffffff;
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 99999;
-        box-shadow: 
-            0 0 15px #ff6600,
-            0 0 25px #ff6600,
-            0 0 35px #ff6600,
-            0 0 45px rgba(255, 102, 0, 0.8);
-        transition: all 0.05s ease;
-        transform: translate(-50%, -50%);
-        opacity: 1;
-        mix-blend-mode: screen;
-    `;
-    document.body.appendChild(cursor);
-    console.log('VespAI Dashboard: Custom cursor created and added to page!');
     
-    // Animate the glow
+    try {
+        // Create cursor element
+        cursor = document.createElement('div');
+        // Set individual properties for better browser compatibility
+        cursor.style.position = 'fixed';
+        cursor.style.width = '16px';
+        cursor.style.height = '16px';
+        cursor.style.backgroundColor = '#ff6600';
+        cursor.style.border = '2px solid #ffffff';
+        cursor.style.borderRadius = '50%';
+        cursor.style.pointerEvents = 'none';
+        cursor.style.zIndex = '99999';
+        cursor.style.boxShadow = '0 0 15px #ff6600, 0 0 25px #ff6600';
+        cursor.style.transform = 'translate(-50%, -50%)';
+        cursor.style.opacity = '1';
+        document.body.appendChild(cursor);
+        console.log('VespAI Dashboard: Custom cursor created and added to page!');
+    } catch (error) {
+        console.error('VespAI Dashboard: Failed to create cursor:', error);
+        // Fallback: just disable default cursor
+        document.body.style.cursor = 'none';
+    }
+    
+    // Animate the glow (simplified for better performance)
     setInterval(() => {
-        if (cursor) {
-            const intensity = Math.sin(Date.now() * 0.005) * 0.5 + 0.5;
-            const glowSize = 15 + intensity * 15;
-            cursor.style.boxShadow = `
-                0 0 ${glowSize}px #ff6600,
-                0 0 ${glowSize * 2}px #ff6600,
-                0 0 ${glowSize * 3}px #ff6600,
-                inset 0 0 10px #ffffff
-            `;
+        try {
+            if (cursor && cursor.style) {
+                const intensity = Math.sin(Date.now() * 0.003) * 0.3 + 0.7;
+                const glowSize = Math.round(10 + intensity * 10);
+                cursor.style.boxShadow = `0 0 ${glowSize}px #ff6600, 0 0 ${glowSize * 2}px rgba(255, 102, 0, 0.6)`;
+            }
+        } catch (error) {
+            console.error('VespAI Dashboard: Animation error:', error);
         }
-    }, 50);
+    }, 100);
 });
 
 // Track mouse movement
 document.addEventListener('mousemove', function(e) {
-    if (cursor) {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
+    try {
+        if (cursor && cursor.style) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        }
+    } catch (error) {
+        console.error('VespAI Dashboard: Mouse tracking error:', error);
     }
 });
 

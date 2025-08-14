@@ -166,7 +166,7 @@ class VespAIApplication:
     def _run_web_server(self, host: str, port: int):
         """Run Flask web server (called in background thread)."""
         try:
-            self.flask_app.run(host=host, port=port, debug=False, use_reloader=False)
+            self.flask_app.run(host=host, port=port, debug=False, use_reloader=False, threaded=True)
         except Exception as e:
             logger.error("Web server error: %s", e)
     

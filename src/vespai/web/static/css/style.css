@@ -5,7 +5,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: none; /* Hide default cursor */
+}
+
+/* Hide default cursor - try multiple approaches for browser compatibility */
+body {
+    cursor: none !important;
+}
+
+body * {
+    cursor: inherit !important;
+}
+
+/* Fallback for browsers that don't support cursor: none */
+@media (pointer: fine) {
+    body, body * {
+        cursor: none !important;
+    }
 }
 
 /* Custom cursor styles handled by JavaScript */
