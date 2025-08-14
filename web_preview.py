@@ -18,10 +18,14 @@ import os
 import sys
 import threading
 import time
+import warnings
 from collections import deque
 from dotenv import load_dotenv
 
 import json
+
+# Suppress specific PyTorch autocast deprecation warning from YOLOv5
+warnings.filterwarnings("ignore", message=".*torch.cuda.amp.autocast.*", category=FutureWarning)
 
 # Load environment variables from .env file
 load_dotenv()
