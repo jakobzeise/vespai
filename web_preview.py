@@ -64,9 +64,9 @@ PUBLIC_URL = f"https://{DOMAIN_NAME}" if USE_HTTPS else f"http://{DOMAIN_NAME}"
 
 # Validate critical configuration
 if not LOX24_API_KEY and os.getenv("ENABLE_SMS", "true").lower() == "true":
-    print("⚠️  Warning: LOX24_API_KEY not set - SMS alerts disabled")
+    print("WARNING: LOX24_API_KEY not set - SMS alerts disabled")
 if not PHONE_NUMBER and os.getenv("ENABLE_SMS", "true").lower() == "true":
-    print("⚠️  Warning: PHONE_NUMBER not set - SMS alerts disabled")
+    print("WARNING: PHONE_NUMBER not set - SMS alerts disabled")
 
 # ───────────────────────── Flask Web Server ─────────────────────────
 app = Flask(__name__)
