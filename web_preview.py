@@ -1730,10 +1730,11 @@ def main():
     # Alternative paths to try if main path doesn't exist
     if not os.path.exists(weights_pt):
         alternative_paths = [
+            "models/yolov5s-all-data.pt",  # Custom hornet model (priority)
+            "yolov5s-all-data.pt",
             "yolov5s.pt",  # Default YOLOv5 small model
             "models/yolov5s.pt",
-            os.path.join(os.getcwd(), "yolov5s.pt"),
-            "yolov5s-all-data.pt"
+            os.path.join(os.getcwd(), "yolov5s.pt")
         ]
 
         for alt_path in alternative_paths:
