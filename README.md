@@ -13,41 +13,61 @@ VespAI is a real-time hornet detection system that uses YOLOv5 computer vision t
 - **Data Logging**: Comprehensive detection logs and hourly statistics
 - **Mobile Responsive**: Web interface optimized for mobile devices
 
-## Quick Start
+## 🚀 Quick Start
 
-### 1. Clone and Setup
+### Option 1: One-Click Setup (Recommended)
+
+**Windows:**
+```batch
+quick-start.bat
+```
+
+**Linux/macOS:**
 ```bash
+./quick-start.sh
+```
 
-# Clone repository and install dependencies
-git clone https://github.com/jakobzeise/vespai.git
-cd vespai
+### Option 2: Automated Setup (Recommended)
+```bash
+# Automated setup handles everything
+python scripts/setup.py
+
+# Start the system
+python main.py --web
+```
+
+### Option 3: Manual Setup
+```bash
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Create necessary directories
+mkdir -p models/yolov5-params logs monitor/detections
+
+# Download VespAI hornet model (14MB)
+curl -L -o models/yolov5-params/yolov5s-all-data.pt \
+  "https://github.com/andrw3000/vespai/raw/main/models/yolov5-params/yolov5s-all-data.pt"
+
+# Configure environment (optional)
+cp .env.template .env
 ```
 
-### 2. Configure Environment
+### 2. Run the System
 ```bash
-
-# Edit .env with your configuration (see Configuration section)
-cp .env.example .env
-```
-
-### 3. Download YOLOv5 Model
-Place your trained hornet detection model at:
-- `/opt/vespai/models/yolov5-params/yolov5s-all-data.pt` (recommended)
-- Or use default YOLOv5 model: `yolov5s.pt`
-
-### 4. Run the System
-```bash
-
 # Basic usage with web interface
 python main.py --web
 
 # With motion detection and image saving
 python main.py --web --motion --save
+
+# Performance mode for Raspberry Pi
+python main.py --web --resolution 720p --motion --conf 0.7
 ```
 
-### 5. Access Dashboard
-Open your browser to: `http://localhost:5000`
+### 3. Access Dashboard
+Open your browser to: `http://localhost:8081`
+
+📋 **For complete installation instructions including Raspberry Pi setup, see [docs/INSTALL.md](docs/INSTALL.md)**
 
 ## Configuration
 
@@ -96,41 +116,52 @@ Options:
 
 ### System Requirements
 
-- Python 3.7+
-- USB Camera (tested with Logitech Brio)
-- Raspberry Pi 4+ (recommended for deployment)
+- **Python**: 3.7+ (3.9+ recommended for Raspberry Pi)  
+- **Memory**: 2GB RAM minimum, 4GB recommended
+- **Storage**: 1GB free space for models and dependencies
+- **Camera**: USB camera or CSI camera (Raspberry Pi)
+
+### Supported Platforms
+- ✅ **Windows** 10/11 (x64)
+- ✅ **macOS** 10.15+ (Intel/Apple Silicon)  
+- ✅ **Linux** Ubuntu 18.04+, Debian 10+
+- ✅ **Raspberry Pi 4** (4GB/8GB RAM recommended)
+- ✅ **Raspberry Pi 5** (full support)
 
 ### Dependencies Installation
 
-#### Standard Installation
+#### Quick Install (All Platforms)
 ```bash
+python scripts/setup.py
+```
 
-# Install Python packages
+#### Manual Install
+```bash
 pip install -r requirements.txt
 ```
 
-#### Raspberry Pi Specific
+#### Raspberry Pi Optimizations
 ```bash
+# Enable GPU memory (128MB recommended)
+sudo raspi-config
+# Advanced Options > Memory Split > 128
 
 # Install system dependencies
-sudo apt update
-sudo apt install python3-opencv python3-pip
-
-# Install Python packages
-pip install -r requirements.txt
+sudo apt update && sudo apt install python3-opencv python3-pip git
 ```
 
-### YOLOv5 Model Setup
+### VespAI Model Setup
 
-1. **Custom Model** (Recommended):
-   - Train a YOLOv5 model with hornet classes:
-     - Class 0: Vespa crabro (European hornet)
-     - Class 1: Vespa velutina (Asian hornet)
-   - Place model at: `/opt/vespai/models/yolov5-params/yolov5s-all-data.pt`
+1. **VespAI Hornet Model** (Recommended):
+   - Specialized model trained for hornet detection
+   - **Classes**: 0=Vespa crabro, 1=Vespa velutina  
+   - **Size**: 14MB
+   - **Download**: Automated via `python scripts/setup.py`
+   - **Manual**: See [docs/INSTALL.md](docs/INSTALL.md) for manual download
 
-2. **Default Model**:
-   - System will download `yolov5s.pt` automatically
-   - May not be optimized for hornet detection
+2. **Fallback Model**:
+   - Generic `yolov5s.pt` as fallback
+   - ⚠️ Not optimized for hornet detection - may produce false alerts
 
 ## Usage Examples
 
@@ -146,9 +177,11 @@ python main.py --web --motion
 
 ### Production Deployment
 ```bash
-
 # Full featured production setup
 python main.py --web --motion --save --conf 0.85
+
+# Raspberry Pi optimized
+python main.py --web --resolution 720p --motion --conf 0.7
 
 # Process recorded video
 python main.py --video input.mp4 --save --conf 0.9
@@ -200,17 +233,19 @@ python main.py --web --resolution 720p
 
 ### Raspberry Pi Setup
 ```bash
-
-# System setup
+# System preparation
 sudo apt update && sudo apt upgrade -y
 sudo apt install python3-pip python3-opencv git
 
 # Clone and setup
-git clone https://github.com/your-username/vespai.git
+git clone https://github.com/andrw3000/vespai.git
 cd vespai
-pip install -r requirements.txt
+python scripts/setup.py
 
-# Configure autostart (systemd service recommended)
+# Test system
+python main.py --web --resolution 720p --motion
+
+# Configure systemd service (see docs/INSTALL.md for details)
 ```
 
 ### Security Considerations

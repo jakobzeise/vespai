@@ -16,7 +16,7 @@ def register_routes(app):
         stats_manager = current_app.config['STATS_MANAGER']
         stats = stats_manager.get_stats()
         
-        return render_template('reliable_feed.html',
+        return render_template('dashboard.html',
                              timestamp=time.strftime("%H:%M:%S"),
                              timestamp_ms=int(time.time() * 1000),
                              frame_id=stats.get('frame_id', 0),
@@ -1113,6 +1113,34 @@ def register_routes(app):
         else:
             return "Failed to encode frame", 500
     
+    @app.route('/test_frame.jpg')
+    def test_frame():
+        """Simple test frame to verify the endpoint works"""
+        import time
+        import numpy as np
+        
+        # Create a simple test frame
+        frame = np.zeros((480, 640, 3), dtype=np.uint8)
+        frame[:] = (50, 50, 100)  # Dark blue background
+        
+        # Add timestamp
+        timestamp = time.strftime("%H:%M:%S")
+        cv2.putText(frame, f"TEST FRAME - {timestamp}", (50, 240), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+        
+        # Encode as JPEG
+        success, encoded_image = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])
+        if not success:
+            return "Error creating test frame", 500
+            
+        response = Response(encoded_image.tobytes(), mimetype='image/jpeg')
+        response.headers.update({
+            'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        })
+        return response
+
     @app.route('/current_frame.jpg')
     def current_frame():
         """Universal current frame endpoint - works on all browsers/platforms"""

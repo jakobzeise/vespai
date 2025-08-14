@@ -63,9 +63,11 @@ class DetectionEngine:
     def _try_alternative_paths(self):
         """Try alternative model paths"""
         alternative_paths = [
+            "models/yolov5-params/yolov5s-all-data.pt",  # VespAI hornet model
+            "models/yolov5s-all-data.pt", 
+            "models/yolov5s.pt",
             "yolov5s.pt",
-            "models/yolov5s.pt", 
-            os.path.join(os.getcwd(), "yolov5s.pt"),
+            os.path.join(os.getcwd(), "models", "yolov5s.pt"),
             "yolov5s-all-data.pt"
         ]
         

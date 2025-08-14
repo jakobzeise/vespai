@@ -246,11 +246,11 @@ function createChartBar(data, maxVal, isHourly = false) {
     return bar;
 }
 
-// Toggle fullscreen mode for video
+// Toggle fullscreen mode for video canvas
 function toggleFullscreen() {
-    const video = document.getElementById('video-feed');
+    const canvas = document.getElementById('video-feed');
     if (!document.fullscreenElement) {
-        video.requestFullscreen().catch(err => {
+        canvas.requestFullscreen().catch(err => {
             console.error(`Error attempting to enable fullscreen: ${err.message}`);
         });
     } else {
@@ -275,23 +275,79 @@ function showDetectionFrame(frameId) {
 
 // Simple and reliable video streaming - no complex classes needed
 
-// Ultra-simple direct image refresh - same as /simple page
+// Ultra-smooth canvas-based video feed with zero flickering
 function startVideoPolling() {
-    const imgElement = document.getElementById('video-feed');
+    const canvas = document.getElementById('video-feed');
     
-    if (!imgElement) {
-        console.error('Video feed element not found');
+    if (!canvas) {
+        console.error('Video canvas element not found');
         return;
     }
     
-    console.log('Using ultra-simple direct refresh approach');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error('Canvas 2D context not supported');
+        return;
+    }
     
-    // Direct image source update every 1 second with cache-busting timestamp
+    // Set canvas to smooth scaling
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    
+    console.log('Using ultra-smooth canvas approach - zero flickering possible');
+    
+    let frameCounter = 0;
+    let lastFrameTime = Date.now();
+    let fps = 0;
+    
+    // Smooth canvas update every 1000ms
     setInterval(() => {
-        imgElement.src = `/current_frame.jpg?t=${Date.now()}`;
+        frameCounter++;
+        const timestamp = Date.now();
+        const random = Math.random();
+        const counter = frameCounter;
+        
+        // Calculate FPS
+        const timeDiff = timestamp - lastFrameTime;
+        if (timeDiff > 0) {
+            fps = Math.round(1000 / timeDiff);
+        }
+        lastFrameTime = timestamp;
+        
+        // Multiple cache-busting parameters
+        const newSrc = `/current_frame.jpg?t=${timestamp}&r=${random}&c=${counter}&bust=${Date.now()}`;
+        
+        // Load image and draw on canvas (prevents all flickering)
+        const img = new Image();
+        img.onload = function() {
+            // Clear canvas with dark background
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw video frame
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            // Add canvas overlay info
+            ctx.fillStyle = '#00ff00';
+            ctx.font = '14px Arial';
+            ctx.fillText(`Live Frame ${counter}`, 10, canvas.height - 40);
+            ctx.fillText(`${new Date().toLocaleTimeString()}`, 10, canvas.height - 20);
+            
+            console.log(`✓ Canvas frame ${counter} rendered at ${new Date().toLocaleTimeString()}`);
+        };
+        img.onerror = function() {
+            console.warn(`✗ Frame ${counter} failed to load`);
+            // Draw error frame on canvas
+            ctx.fillStyle = '#333';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ff6600';
+            ctx.font = '24px Arial';
+            ctx.fillText('Loading...', canvas.width/2 - 60, canvas.height/2);
+        };
+        img.src = newSrc;
     }, 1000);
     
-    updateVideoStatus('Live (Direct)', '#0f0');
+    updateVideoStatus('Live (Canvas)', '#0f0');
 }
 
 function updateVideoStatus(message, color) {

@@ -32,7 +32,7 @@ class Config:
     CAMERA_FPS = int(os.getenv("CAMERA_FPS", "30"))
     
     # Model Configuration
-    MODEL_PATH = os.getenv("MODEL_PATH", "/opt/vespai/models/yolov5-params/yolov5s-all-data.pt")
+    MODEL_PATH = os.getenv("MODEL_PATH", "models/yolov5s-all-data.pt")
     
     # Motion Detection
     ENABLE_MOTION_DETECTION = os.getenv("ENABLE_MOTION_DETECTION", "false").lower() == "true"

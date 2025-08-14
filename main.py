@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -26,15 +27,54 @@ from services.sms import SMSAlertService
 from vespai_utils.stats import StatsManager
 from web.app import create_app, update_web_frame, start_web_server
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('vespai.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
-)
+# Configure logging with proper Unicode support for Windows
+import platform
+if platform.system() == 'Windows':
+    # For Windows, use UTF-8 encoding to handle Unicode characters
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('logs/vespai.log', encoding='utf-8'),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+    # Set console to UTF-8 mode for Windows
+    try:
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.detach())
+    except Exception:
+        # Fallback: Remove Unicode characters from log messages
+        class UnicodeFilterHandler(logging.StreamHandler):
+            def emit(self, record):
+                try:
+                    record.msg = str(record.msg).encode('ascii', 'ignore').decode('ascii')
+                    if hasattr(record, 'args') and record.args:
+                        record.args = tuple(str(arg).encode('ascii', 'ignore').decode('ascii') 
+                                          for arg in record.args)
+                    super().emit(record)
+                except Exception:
+                    pass
+        
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('logs/vespai.log', encoding='utf-8'),
+                UnicodeFilterHandler(sys.stdout)
+            ]
+        )
+else:
+    # For non-Windows systems, use standard configuration
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('logs/vespai.log'),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
 logger = logging.getLogger(__name__)
 
 def parse_arguments():
@@ -106,14 +146,24 @@ def setup_camera(args):
         cap = cv2.VideoCapture(args.video)
         logger.info(f"Using video file: {args.video}")
     else:
-        logger.info("Initializing built-in MacBook camera...")
+        import platform
+        os_name = platform.system()
+        logger.info(f"Initializing camera on {os_name}...")
         # Try to find built-in camera specifically
         cap = None
+        
+        # Use appropriate backend for the operating system
+        if os_name == "Darwin":  # macOS
+            backend = cv2.CAP_AVFOUNDATION
+        elif os_name == "Windows":
+            backend = cv2.CAP_DSHOW  # DirectShow for Windows
+        else:  # Linux and others
+            backend = cv2.CAP_V4L2
         
         # Try different camera indices to find the built-in one
         for camera_id in range(5):  # Check cameras 0-4
             logger.info(f"Trying camera index {camera_id}...")
-            test_cap = cv2.VideoCapture(camera_id, cv2.CAP_AVFOUNDATION)
+            test_cap = cv2.VideoCapture(camera_id, backend)
             if test_cap.isOpened():
                 # Test if we can read a frame
                 ret, test_frame = test_cap.read()
@@ -135,7 +185,7 @@ def setup_camera(args):
         # If no suitable camera found, use camera 0 as fallback
         if cap is None:
             logger.warning("No built-in camera detected, trying default camera...")
-            cap = cv2.VideoCapture(0, cv2.CAP_AVFOUNDATION)
+            cap = cv2.VideoCapture(0, backend)
             if not cap.isOpened():
                 cap = cv2.VideoCapture(0)
             if not cap.isOpened():

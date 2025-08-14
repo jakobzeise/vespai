@@ -59,14 +59,22 @@ detections/
 *.mp4
 *.avi
 
-# Model weights (if large)
-*.pt
+# Model weights (ignore large custom models but keep essential ones)
+models/yolov5-params/
+models/custom/
 *.pth
 *.weights
+# Keep essential model files like yolov5s.pt
 
 # Logs
 *.log
 logs/
+
+# VespAI specific
+!logs/.gitkeep
+!models/.gitkeep
+!monitor/.gitkeep
+!monitor/detections/.gitkeep
 
 # Temporary files
 *.tmp
