@@ -889,8 +889,8 @@ HTML_TEMPLATE = '''
                 <div class="system-label">RAM Usage</div>
             </div>
             <div class="system-stat">
-                <div class="system-value" id="confidence">80%</div>
-                <div class="system-label">Confidence</div>
+                <div class="system-value" id="uptime-sys">0h 0m</div>
+                <div class="system-label">Uptime</div>
             </div>
         </div>
     </div>
@@ -1009,10 +1009,10 @@ HTML_TEMPLATE = '''
                     document.getElementById('fps').textContent = (data.fps || 0).toFixed(1) + ' FPS';
                     
                     // Update system info with safety checks
-                    if (data.cpu_temp !== undefined) document.getElementById('cpu-temp').textContent = data.cpu_temp + '°C';
+                    if (data.cpu_temp !== undefined) document.getElementById('cpu-temp').textContent = Math.round(data.cpu_temp) + '°C';
                     if (data.cpu_usage !== undefined) document.getElementById('cpu-usage').textContent = data.cpu_usage + '%';
                     if (data.ram_usage !== undefined) document.getElementById('ram-usage').textContent = data.ram_usage + '%';
-                    if (data.confidence_avg !== undefined) document.getElementById('confidence').textContent = data.confidence_avg.toFixed(0) + '%';
+                    if (data.uptime !== undefined) document.getElementById('uptime-sys').textContent = data.uptime;
 
                     // Update log without flickering
                     if (data.detection_log) {
