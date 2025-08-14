@@ -1971,6 +1971,20 @@ def main():
                         f">>> Detection #{stats['total_detections']} at frame {frame_id}")
                     print(f"    Velutina: {ah}, Crabro: {eh}")
 
+                    # Send SMS alert with delay and frame URL
+                    frame_url = f"{PUBLIC_URL}/frame/{detection_key}"
+                    
+                    print(f"[DEBUG SMS] ah={ah}, eh={eh}, frame_url={frame_url}")
+                    
+                    if ah > 0:  # Asian hornet detected - high priority
+                        sms_text = f"⚠️ ALERT: {ah} Asian Hornet(s) detected at {datetime.datetime.now().strftime('%H:%M')}! View image: {frame_url}"
+                        print(f"[DEBUG SMS] Sending Asian hornet SMS: {sms_text}")
+                        send_sms_with_delay(sms_text)
+                    elif eh > 0:  # Only European hornet
+                        sms_text = f"ℹ️ Info: {eh} European Hornet(s) detected at {datetime.datetime.now().strftime('%H:%M')}. View: {frame_url}"
+                        print(f"[DEBUG SMS] Sending European hornet SMS: {sms_text}")
+                        send_sms_with_delay(sms_text)
+
                     # Save if enabled
                     if args.save:
                         ts = datetime.datetime.now().strftime(
@@ -1990,20 +2004,6 @@ def main():
                                 os.path.isfile(os.path.join(RESULT_DIR, f)))
                         except:
                             pass
-
-                        # Send SMS alert with delay and frame URL
-                        frame_url = f"{PUBLIC_URL}/frame/{detection_key}"
-                        
-                        print(f"[DEBUG SMS] ah={ah}, eh={eh}, frame_url={frame_url}")
-                        
-                        if ah > 0:  # Asian hornet detected - high priority
-                            sms_text = f"⚠️ ALERT: {ah} Asian Hornet(s) detected at {datetime.datetime.now().strftime('%H:%M')}! View image: {frame_url}"
-                            print(f"[DEBUG SMS] Sending Asian hornet SMS: {sms_text}")
-                            send_sms_with_delay(sms_text)
-                        elif eh > 0:  # Only European hornet
-                            sms_text = f"ℹ️ Info: {eh} European Hornet(s) detected at {datetime.datetime.now().strftime('%H:%M')}. View: {frame_url}"
-                            print(f"[DEBUG SMS] Sending European hornet SMS: {sms_text}")
-                            send_sms_with_delay(sms_text)
 
                 # Update average confidence
                 if confidence_count > 0:
