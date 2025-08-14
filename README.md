@@ -43,6 +43,11 @@ python main.py --web
 
 **Raspberry Pi (requires virtual environment):**
 ```bash
+# Clone to home directory (recommended for permissions)
+cd ~
+git clone https://github.com/andrw3000/vespai.git
+cd vespai
+
 # Create and activate virtual environment
 python3 -m venv vespai-env
 source vespai-env/bin/activate
@@ -253,7 +258,8 @@ python main.py --web --resolution 720p
 sudo apt update && sudo apt upgrade -y
 sudo apt install python3-full python3-pip python3-opencv git
 
-# Clone repository
+# Clone repository to home directory (recommended for permissions)
+cd ~
 git clone https://github.com/andrw3000/vespai.git
 cd vespai
 

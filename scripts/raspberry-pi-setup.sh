@@ -7,6 +7,20 @@ set -e
 echo "🍓 VespAI Raspberry Pi Setup"
 echo "=============================="
 
+# Check if we're running from the correct location (home directory recommended)
+if [[ "$PWD" == "/vespai" ]] || [[ "$PWD" =~ ^/[^/]*$ ]]; then
+    echo "⚠️  Warning: Running from system directory ($PWD)"
+    echo "   For best results, clone to your home directory:"
+    echo "   cd ~ && git clone https://github.com/andrw3000/vespai.git"
+    echo "   This avoids Git permission issues."
+    read -p "Continue anyway? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "💡 Recommended: cd ~ && git clone https://github.com/andrw3000/vespai.git"
+        exit 1
+    fi
+fi
+
 # Check if we're on Raspberry Pi
 if ! grep -q "Raspberry Pi" /proc/device-tree/model 2>/dev/null; then
     echo "⚠️  Warning: This doesn't appear to be a Raspberry Pi"

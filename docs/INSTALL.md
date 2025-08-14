@@ -19,7 +19,8 @@ python main.py --web
 
 ### Raspberry Pi (PEP 668 Compatible)
 ```bash
-# Clone repository
+# Clone repository to home directory (recommended for permissions)
+cd ~
 git clone https://github.com/andrw3000/vespai.git
 cd vespai
 
@@ -71,7 +72,12 @@ python scripts/setup.py
 
 **Raspberry Pi (requires virtual environment):**
 ```bash
+# Clone to home directory first (recommended for permissions)
+cd ~
+git clone https://github.com/andrw3000/vespai.git
 cd vespai
+
+# Create virtual environment
 python3 -m venv vespai-env
 source vespai-env/bin/activate
 python scripts/setup.py
@@ -105,6 +111,12 @@ pip install -r requirements.txt
 
 **Raspberry Pi (create virtual environment first):**
 ```bash
+# Clone to home directory (recommended for permissions)
+cd ~
+git clone https://github.com/andrw3000/vespai.git
+cd vespai
+
+# Create virtual environment
 python3 -m venv vespai-env
 source vespai-env/bin/activate
 pip install -r requirements.txt
