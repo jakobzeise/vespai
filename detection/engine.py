@@ -81,17 +81,28 @@ class DetectionEngine:
         """Try different YOLOv5 loading methods"""
         model = None
         
-        # Method 1: Try torch.hub with proper error handling for DetectMultiBackend
+        # Method 1: Direct PyTorch loading with weights_only=False
         try:
             import torch
-            import warnings
             
-            # Suppress specific warnings during model loading
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore", message=".*DetectMultiBackend.*")
-                warnings.filterwarnings("ignore", message=".*__module__.*")
-                
-                # Try torch.hub load first with proper parameters
+            # Load model directly with weights_only=False to handle PyTorch 2.8
+            logger.info("Trying direct PyTorch model loading...")
+            checkpoint = torch.load(self.model_path, map_location='cpu', weights_only=False)
+            
+            # Try ultralytics YOLO first
+            try:
+                from ultralytics import YOLO
+                model = YOLO(self.model_path)
+                logger.info("Model loaded via ultralytics YOLO")
+                return model
+            except Exception as e:
+                logger.debug(f"Ultralytics YOLO failed: {e}")
+            
+            # Try torch.hub with weights_only fix
+            original_load = torch.load
+            torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
+            
+            try:
                 model = torch.hub.load(
                     'ultralytics/yolov5', 'custom',
                     path=self.model_path,
@@ -100,38 +111,38 @@ class DetectionEngine:
                     trust_repo=True,
                     verbose=False
                 )
-                logger.info("Model loaded via torch.hub")
+                torch.load = original_load  # Restore original function
+                logger.info("Model loaded via torch.hub with weights_only=False")
                 return model
+            except Exception as e:
+                torch.load = original_load  # Restore even on failure
+                logger.debug(f"torch.hub with patch failed: {e}")
                 
         except Exception as e:
-            logger.warning(f"torch.hub loading failed: {e}")
+            logger.warning(f"Direct PyTorch loading failed: {e}")
         
-        # Method 2: Try yolov5 package with safe loading fix
+        # Method 2: Try yolov5 package with weights_only fix
         try:
             import yolov5
-            # Fix for PyTorch 2.6 weights_only issue
             import torch
-            torch.serialization.add_safe_globals(['models.yolo.Model'])
-            model = yolov5.load(self.model_path, device='cpu')
-            logger.info("Model loaded via yolov5 package")
-            return model
+            
+            # Monkey patch torch.load globally for yolov5 package
+            original_load = torch.load
+            torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
+            
+            try:
+                model = yolov5.load(self.model_path, device='cpu')
+                torch.load = original_load  # Restore original function
+                logger.info("Model loaded via yolov5 package with weights_only=False")
+                return model
+            except Exception as e:
+                torch.load = original_load  # Restore even on failure
+                logger.warning(f"yolov5 package loading failed: {e}")
+                
         except ImportError:
             logger.info("yolov5 package not found, trying alternative methods...")
         except Exception as e:
-            logger.warning(f"yolov5 package loading failed: {e}")
-            # Try loading with weights_only=False as fallback
-            try:
-                import torch
-                # Monkey patch torch.load to use weights_only=False
-                original_load = torch.load
-                torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
-                import yolov5
-                model = yolov5.load(self.model_path, device='cpu')
-                torch.load = original_load  # Restore original function
-                logger.info("Model loaded via yolov5 package (fallback method)")
-                return model
-            except Exception as e2:
-                logger.warning(f"yolov5 fallback loading also failed: {e2}")
+            logger.warning(f"yolov5 package setup failed: {e}")
         
         # Method 3: Try local YOLOv5 directory
         yolo_dir = os.path.join(os.path.dirname(self.model_path), "yolov5")
