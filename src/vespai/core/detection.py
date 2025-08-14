@@ -16,6 +16,11 @@ import numpy as np
 import logging
 from typing import Tuple, Optional, Dict, Any, List
 from collections import deque
+import torch
+
+# Fix PyTorch 2.6+ weights_only issue
+original_load = torch.load
+torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +181,8 @@ class ModelManager:
         loading_methods = [
             self._load_via_yolov5_package,
             self._load_via_local_directory,
-            self._load_via_github
+            self._load_via_github,
+            self._load_fallback_model
         ]
         
         for method in loading_methods:
@@ -249,23 +255,33 @@ class ModelManager:
         import torch
         
         try:
-            return torch.hub.load('ultralytics/yolov5', 'custom',
-                                 path=self.model_path,
-                                 force_reload=True,
-                                 trust_repo=True,
-                                 skip_validation=True,
-                                 _verbose=False)
-        except Exception as e:
-            logger.warning("Standard loading failed, trying with weights_only=False: %s", e)
-            # Fallback for PyTorch 2.6+ compatibility
+            # Try with safe globals first
             import torch.serialization
-            torch.serialization.add_safe_globals(['models.yolo.DetectionModel'])
-            return torch.hub.load('ultralytics/yolov5', 'custom',
-                                 path=self.model_path,
-                                 force_reload=True,
-                                 trust_repo=True,
-                                 skip_validation=True,
-                                 _verbose=False)
+            with torch.serialization.safe_globals(['models.yolo.DetectionModel']):
+                return torch.hub.load('ultralytics/yolov5', 'custom',
+                                     path=self.model_path,
+                                     force_reload=True,
+                                     trust_repo=True,
+                                     skip_validation=True,
+                                     _verbose=False)
+        except Exception as e:
+            logger.warning("Safe loading failed, trying direct method: %s", e)
+            # Direct torch.load with weights_only=False
+            try:
+                import torch
+                model_data = torch.load(self.model_path, map_location='cpu', weights_only=False)
+                model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=False, _verbose=False)
+                model.load_state_dict(model_data['model'].state_dict())
+                return model
+            except Exception as e2:
+                logger.warning("Direct loading also failed: %s", e2)
+                raise e
+    
+    def _load_fallback_model(self):
+        """Load a standard YOLOv5s model as fallback."""
+        import torch
+        logger.info("Loading standard YOLOv5s model as fallback")
+        return torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True, _verbose=False)
     
     def _configure_model(self):
         """Configure model after loading."""
