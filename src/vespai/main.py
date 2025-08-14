@@ -130,7 +130,16 @@ class VespAIApplication:
         """Initialize Flask web interface."""
         logger.info("Initializing web interface...")
         
-        self.flask_app = Flask(__name__)
+        # Configure Flask with template and static directories
+        import os
+        web_dir = os.path.join(os.path.dirname(__file__), 'web')
+        template_dir = os.path.join(web_dir, 'templates')
+        static_dir = os.path.join(web_dir, 'static')
+        
+        self.flask_app = Flask(__name__, 
+                              template_folder=template_dir,
+                              static_folder=static_dir,
+                              static_url_path='/static')
         
         # Register web routes
         register_routes(

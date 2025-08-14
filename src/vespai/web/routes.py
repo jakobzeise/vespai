@@ -28,7 +28,8 @@ Version: 1.0
 import cv2
 import psutil
 import datetime
-from flask import Response, render_template_string, jsonify
+from flask import Response, render_template_string, render_template, jsonify, send_from_directory
+import os
 
 # Original HTML template from working web_preview.py
 HTML_TEMPLATE = '''
@@ -1100,7 +1101,12 @@ def register_routes(app, stats, hourly_detections, web_frame, web_lock):
         Returns:
             str: HTML content for the main VespAI dashboard
         """
-        return render_template_string(HTML_TEMPLATE)
+        # Use external template if available, fallback to inline
+        try:
+            return render_template('dashboard.html')
+        except:
+            # Fallback to inline template
+            return render_template_string(HTML_TEMPLATE)
 
     @app.route('/video_feed')
     def video_feed():
