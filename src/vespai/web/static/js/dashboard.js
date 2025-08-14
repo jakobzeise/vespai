@@ -1,4 +1,47 @@
 // VespAI Dashboard JavaScript
+// Author: Jakob Zeise (Zeise Digital)
+
+// Custom orange neon cursor
+let cursor = null;
+
+// Initialize custom cursor
+document.addEventListener('DOMContentLoaded', function() {
+    // Create cursor element
+    cursor = document.createElement('div');
+    cursor.style.cssText = `
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        background: #ff6600;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        box-shadow: 0 0 10px #ff6600, 0 0 20px #ff6600, 0 0 30px #ff6600;
+        mix-blend-mode: screen;
+        transition: all 0.1s ease;
+        transform: translate(-50%, -50%);
+    `;
+    document.body.appendChild(cursor);
+});
+
+// Track mouse movement
+document.addEventListener('mousemove', function(e) {
+    if (cursor) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    }
+});
+
+// Hide cursor when leaving window
+document.addEventListener('mouseleave', function() {
+    if (cursor) cursor.style.opacity = '0';
+});
+
+// Show cursor when entering window
+document.addEventListener('mouseenter', function() {
+    if (cursor) cursor.style.opacity = '1';
+});
+
 // Track log entries to prevent duplicates
 let logMap = new Map();
 let lastChartUpdate = 0;

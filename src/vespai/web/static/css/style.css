@@ -1,9 +1,14 @@
-/* VespAI Dashboard Styles */
+/* VespAI Dashboard Styles 
+ * Author: Jakob Zeise (Zeise Digital)
+ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: none; /* Hide default cursor */
 }
+
+/* Custom cursor styles handled by JavaScript */
 
 :root {
     --primary: #ff6600;
@@ -35,7 +40,7 @@ body {
     width: 100%;
 }
 
-/* Honeycomb pattern background */
+/* Honeycomb pattern background with radial gradient */
 body::before {
     content: '';
     position: fixed;
@@ -44,27 +49,18 @@ body::before {
     right: 0;
     bottom: 0;
     opacity: 0.03;
-    background-image: 
+    background: 
+        radial-gradient(ellipse at center, transparent 0%, rgba(10,10,10,0.4) 100%),
         linear-gradient(30deg, transparent 0%, transparent 70%, var(--honey) 70%, var(--honey) 100%),
         linear-gradient(90deg, transparent 0%, transparent 70%, var(--honey) 70%, var(--honey) 100%),
         linear-gradient(150deg, transparent 0%, transparent 70%, var(--honey) 70%, var(--honey) 100%);
-    background-size: 50px 86.6px;
-    background-position: 0 0, 25px 43.3px, 25px 43.3px;
+    background-size: 100% 100%, 50px 86.6px, 50px 86.6px, 50px 86.6px;
+    background-position: 0 0, 0 0, 25px 43.3px, 25px 43.3px;
     pointer-events: none;
     z-index: 0;
 }
 
-body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at center, transparent 0%, rgba(10,10,10,0.4) 100%);
-    pointer-events: none;
-    z-index: 1;
-}
+/* Background radial gradient moved to body::before for cursor compatibility */
 
 /* Ensure all content is above the background */
 .header, .container {
