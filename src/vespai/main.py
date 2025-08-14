@@ -146,8 +146,7 @@ class VespAIApplication:
             self.flask_app,
             self.detection_processor.stats,
             self.detection_processor.hourly_detections,
-            self.web_frame,
-            self.web_lock
+            self
         )
         
         # Start web server in background thread

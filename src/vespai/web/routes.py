@@ -32,7 +32,7 @@ from flask import Response, render_template, jsonify
 import os
 
 
-def register_routes(app, stats, hourly_detections, web_frame, web_lock):
+def register_routes(app, stats, hourly_detections, app_instance):
     """
     Register all essential web routes with the Flask app.
     
@@ -40,8 +40,7 @@ def register_routes(app, stats, hourly_detections, web_frame, web_lock):
         app (Flask): The Flask application instance
         stats (dict): Global statistics dictionary containing detection counts, system stats, etc.
         hourly_detections (dict): Dictionary tracking detections per hour (24-hour format)
-        web_frame (numpy.ndarray): Current video frame for streaming
-        web_lock (threading.Lock): Thread lock for safe web frame access
+        app_instance (VespAIApplication): The main application instance with web_frame and web_lock
     """
     
     @app.route('/')
@@ -74,13 +73,19 @@ def register_routes(app, stats, hourly_detections, web_frame, web_lock):
                 bytes: MJPEG frame data with HTTP multipart boundaries
             """
             while True:
-                with web_lock:
-                    if web_frame is not None:
-                        # Encode frame to JPEG
-                        ret, buffer = cv2.imencode('.jpg', web_frame)
-                        if ret:
-                            yield (b'--frame\r\n'
-                                   b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+                with app_instance.web_lock:
+                    if app_instance.web_frame is None:
+                        continue
+                    frame = app_instance.web_frame.copy()
+
+                # Higher quality and no additional delay (matching original)
+                (flag, encodedImage) = cv2.imencode(".jpg", frame,
+                                                    [cv2.IMWRITE_JPEG_QUALITY, 85])
+                if not flag:
+                    continue
+
+                yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
+                       bytearray(encodedImage) + b'\r\n')
 
         return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -152,9 +157,11 @@ def register_routes(app, stats, hourly_detections, web_frame, web_lock):
         Returns:
             dict: JSON response with complete system statistics
         """
-        # Calculate uptime
-        uptime_seconds = (datetime.datetime.now() - stats["start_time"]).total_seconds()
-        stats["uptime"] = uptime_seconds
+        # Calculate uptime (matching original format)
+        uptime = datetime.datetime.now() - stats["start_time"]
+        hours, remainder = divmod(uptime.seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+        stats["uptime"] = f"{hours}h {minutes}m"
 
         # Get system stats
         try:
