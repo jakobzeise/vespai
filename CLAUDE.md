@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VespAI is a hornet detection system that uses YOLOv5 computer vision to identify Asian hornets (Vespa velutina) and European hornets (Vespa crabro) in real-time. The system provides:
+VespAI is a hornet detection system that uses YOLOv5 computer vision to identify Asian hornets (Vespa velutina) and European hornets (Vespa crabro) in real-time. 
+
+**Important:** This implementation is based on the research paper "VespAI: a deep learning-based system for the detection of invasive hornets" published in Communications Biology (2024), DOI: 10.1038/s42003-024-05979-z.
+
+The system provides:
 
 - Real-time hornet detection using YOLOv5
 - Web dashboard with live video feed and statistics

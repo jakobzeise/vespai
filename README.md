@@ -2,6 +2,8 @@
 
 VespAI is a real-time hornet detection system that uses YOLOv5 computer vision to identify and alert on Asian hornets (Vespa velutina) and European hornets (Vespa crabro). The system provides a web dashboard, SMS alerts, and comprehensive logging for monitoring hornet activity.
 
+**Based on the research:** *VespAI: a deep learning-based system for the detection of invasive hornets* published in Communications Biology (2024). DOI: [10.1038/s42003-024-05979-z](https://doi.org/10.1038/s42003-024-05979-z)
+
 ## Features
 
 - **Real-time Detection**: YOLOv5-based computer vision for accurate hornet identification
@@ -306,12 +308,31 @@ python -c "import cv2; print(cv2.VideoCapture(0).isOpened())"
 ### Logs
 Check `vespai.log` for detailed error information and system status.
 
+## Citation
+
+If you use this project in your research or work, please cite the original research:
+
+```bibtex
+@article{vespai2024,
+  title={VespAI: a deep learning-based system for the detection of invasive hornets},
+  journal={Communications Biology},
+  year={2024},
+  volume={7},
+  pages={318},
+  doi={10.1038/s42003-024-05979-z},
+  url={https://doi.org/10.1038/s42003-024-05979-z}
+}
+```
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+**Important:** This implementation is based on research published in Communications Biology. The original research methodology and concepts are attributed to the authors of the cited paper.
+
 ## Acknowledgments
 
+- Original VespAI research published in Communications Biology (2024)
 - YOLOv5 by Ultralytics
 - Lox24 SMS API
 - Flask web framework
