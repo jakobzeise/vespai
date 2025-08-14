@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VespAI Monitor - Live Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1>VespAI Monitor</h1>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="live-indicator"></div>
+                    <span>Live</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-time"></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="fps">0 FPS</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="frame-count">0</div>
+                <div class="stat-label">Frames Processed</div>
+                <div class="stat-detail" id="uptime">Uptime: 0h 0m</div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="stat-value" style="color: var(--danger);" id="velutina-count">0</div>
+                <div class="stat-label">Vespa Velutina</div>
+                <div class="stat-detail" id="velutina-last">-</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--warning);" id="crabro-count">0</div>
+                <div class="stat-label">Vespa Crabro</div>
+                <div class="stat-detail" id="crabro-last">-</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--success);" id="total-detections">0</div>
+                <div class="stat-label">Total Detections</div>
+                <div class="stat-detail" id="detection-rate">0/h</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="sms-count">0</div>
+                <div class="stat-label">SMS Alerts</div>
+                <div class="stat-detail" id="last-sms">-</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="sms-cost">0.00€</div>
+                <div class="stat-label">SMS Costs</div>
+                <div class="stat-detail" id="cost-per-sms">-</div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Video Container -->
+            <div class="video-container">
+                <div class="video-header">
+                    <h2>Live Detection Feed</h2>
+                    <div class="video-controls">
+                        <div class="live-badge">● LIVE</div>
+                        <button class="fullscreen-btn" onclick="toggleFullscreen()">
+                            <i class="fas fa-expand"></i> Fullscreen
+                        </button>
+                    </div>
+                </div>
+                <img src="/video_feed" alt="Live Feed" class="video-feed" id="video-feed">
+            </div>
+
+            <!-- Detection Log -->
+            <div class="detection-log">
+                <div class="log-header">
+                    <h3><i class="fas fa-list"></i> Detection Log</h3>
+                </div>
+                <div class="log-content" id="log-content">
+                    <!-- Logs will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Hourly Chart -->
+        <div class="chart-card">
+            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar" style="color: var(--honey);"></i> Detections per Hour (Last 24h)</h3>
+            <div class="time-chart" id="hourly-chart">
+                <!-- Chart bars will be inserted here -->
+            </div>
+        </div>
+
+        <!-- System Info -->
+        <div class="system-info">
+            <div class="system-stat">
+                <div class="system-value" id="cpu-temp">0°C</div>
+                <div class="system-label">CPU Temp</div>
+            </div>
+            <div class="system-stat">
+                <div class="system-value" id="cpu-usage">0%</div>
+                <div class="system-label">CPU Usage</div>
+            </div>
+            <div class="system-stat">
+                <div class="system-value" id="ram-usage">0%</div>
+                <div class="system-label">RAM Usage</div>
+            </div>
+            <div class="system-stat">
+                <div class="system-value" id="confidence">80%</div>
+                <div class="system-label">Confidence</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
