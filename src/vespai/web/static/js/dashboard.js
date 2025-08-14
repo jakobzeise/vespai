@@ -88,8 +88,13 @@ updateTime();
 
 // Update log without flickering
 function updateLog(logData) {
-    const logContent = document.getElementById('log-content');
-    const currentIds = new Set();
+    try {
+        const logContent = document.getElementById('log-content');
+        if (!logContent) {
+            console.warn('VespAI Dashboard: log-content element not found');
+            return;
+        }
+        const currentIds = new Set();
 
     // Process each log entry
     logData.forEach((entry, index) => {
@@ -144,20 +149,38 @@ function updateLog(logData) {
         if (id) logMap.delete(id);
         lastChild.remove();
     }
+    } catch (error) {
+        console.error('VespAI Dashboard: Error updating log:', error);
+    }
 }
 
 // Smooth value updates
 function updateValue(elementId, newValue, suffix = '') {
-    const element = document.getElementById(elementId);
-    if (element) {
-        const currentValue = element.textContent.replace(suffix, '');
-        if (currentValue !== newValue.toString()) {
-            element.style.transform = 'scale(1.1)';
-            element.textContent = newValue + suffix;
-            setTimeout(() => {
-                element.style.transform = 'scale(1)';
-            }, 300);
+    try {
+        const element = document.getElementById(elementId);
+        if (!element) {
+            console.warn(`VespAI Dashboard: Element '${elementId}' not found`);
+            return;
         }
+        
+        if (element.textContent !== null && element.textContent !== undefined) {
+            const currentValue = element.textContent.replace(suffix, '');
+            if (currentValue !== newValue.toString()) {
+                element.style.transform = 'scale(1.1)';
+                element.textContent = newValue + suffix;
+                setTimeout(() => {
+                    if (element && element.style) {
+                        element.style.transform = 'scale(1)';
+                    }
+                }, 300);
+            }
+        } else {
+            // Element exists but textContent is null/undefined, just set it
+            console.log(`VespAI Dashboard: Setting initial value for '${elementId}': ${newValue}${suffix}`);
+            element.textContent = newValue + suffix;
+        }
+    } catch (error) {
+        console.error(`VespAI Dashboard: Error updating element '${elementId}' with value '${newValue}${suffix}':`, error);
     }
 }
 
