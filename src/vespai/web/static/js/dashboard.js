@@ -10,18 +10,36 @@ document.addEventListener('DOMContentLoaded', function() {
     cursor = document.createElement('div');
     cursor.style.cssText = `
         position: fixed;
-        width: 8px;
-        height: 8px;
+        width: 12px;
+        height: 12px;
         background: #ff6600;
         border-radius: 50%;
         pointer-events: none;
-        z-index: 9999;
-        box-shadow: 0 0 10px #ff6600, 0 0 20px #ff6600, 0 0 30px #ff6600;
-        mix-blend-mode: screen;
-        transition: all 0.1s ease;
+        z-index: 10000;
+        box-shadow: 
+            0 0 10px #ff6600,
+            0 0 20px #ff6600,
+            0 0 30px #ff6600,
+            inset 0 0 10px #ffffff;
+        transition: all 0.05s ease;
         transform: translate(-50%, -50%);
+        opacity: 1;
     `;
     document.body.appendChild(cursor);
+    
+    // Animate the glow
+    setInterval(() => {
+        if (cursor) {
+            const intensity = Math.sin(Date.now() * 0.005) * 0.5 + 0.5;
+            const glowSize = 15 + intensity * 15;
+            cursor.style.boxShadow = `
+                0 0 ${glowSize}px #ff6600,
+                0 0 ${glowSize * 2}px #ff6600,
+                0 0 ${glowSize * 3}px #ff6600,
+                inset 0 0 10px #ffffff
+            `;
+        }
+    }, 50);
 });
 
 // Track mouse movement
