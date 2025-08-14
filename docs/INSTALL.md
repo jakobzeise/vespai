@@ -19,19 +19,20 @@ python main.py --web
 
 ### Raspberry Pi (PEP 668 Compatible)
 ```bash
+
 # Clone repository to home directory (recommended for permissions)
 cd ~
 git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
-# Create virtual environment (required on modern Raspberry Pi OS)
+# Make setup script executable and run
+chmod +x scripts/raspberry-pi-setup.sh
+./scripts/raspberry-pi-setup.sh
+
+# Or manual setup with virtual environment
 python3 -m venv vespai-env
 source vespai-env/bin/activate
-
-# Run automated setup
 python scripts/setup.py
-
-# Start the system
 python main.py --web
 ```
 

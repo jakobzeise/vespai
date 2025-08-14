@@ -29,6 +29,7 @@ quick-start.bat
 
 **Raspberry Pi (PEP 668 compatible):**
 ```bash
+chmod +x scripts/raspberry-pi-setup.sh
 ./scripts/raspberry-pi-setup.sh
 ```
 
@@ -264,6 +265,7 @@ git clone https://github.com/jakobzeise/vespai.git
 cd vespai
 
 # One-line setup (handles virtual environment)
+chmod +x scripts/raspberry-pi-setup.sh
 ./scripts/raspberry-pi-setup.sh
 
 # Or manual setup with virtual environment

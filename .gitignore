@@ -59,12 +59,8 @@ detections/
 *.mp4
 *.avi
 
-# Model weights (ignore large custom models but keep essential ones)
-models/yolov5-params/
-models/custom/
-*.pth
-*.weights
-# Keep essential model files like yolov5s.pt
+# Model weights - now tracked with Git LFS
+# All models are included for deployment
 
 # Logs
 *.log
