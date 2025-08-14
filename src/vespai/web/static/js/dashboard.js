@@ -73,9 +73,15 @@ let lastChartUpdate = 0;
 
 // Update time
 function updateTime() {
-    const now = new Date();
-    document.getElementById('current-time').textContent = 
-        now.toTimeString().split(' ')[0];
+    try {
+        const now = new Date();
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+            timeElement.textContent = now.toTimeString().split(' ')[0];
+        }
+    } catch (error) {
+        console.error('VespAI Dashboard: Time update error:', error);
+    }
 }
 setInterval(updateTime, 1000);
 updateTime();
@@ -160,6 +166,7 @@ function updateStats() {
     fetch('/api/stats')
         .then(response => response.json())
         .then(data => {
+            try {
             // Update counters with animation
             updateValue('frame-count', data.frame_id || 0);
             updateValue('velutina-count', data.total_velutina || 0);
@@ -169,21 +176,42 @@ function updateStats() {
             
             // Update SMS cost
             if (data.sms_cost !== undefined) {
-                document.getElementById('sms-cost').textContent = data.sms_cost.toFixed(2) + '€';
+                const smsCostElement = document.getElementById('sms-cost');
+                if (smsCostElement) {
+                    smsCostElement.textContent = data.sms_cost.toFixed(2) + '€';
+                }
                 if (data.sms_sent > 0) {
                     const costPerSms = (data.sms_cost / data.sms_sent).toFixed(3);
-                    document.getElementById('cost-per-sms').textContent = costPerSms + '€/SMS';
+                    const costPerSmsElement = document.getElementById('cost-per-sms');
+                    if (costPerSmsElement) {
+                        costPerSmsElement.textContent = costPerSms + '€/SMS';
+                    }
                 }
             }
 
             // Update other stats
-            document.getElementById('fps').textContent = (data.fps || 0).toFixed(1) + ' FPS';
+            const fpsElement = document.getElementById('fps');
+            if (fpsElement) {
+                fpsElement.textContent = (data.fps || 0).toFixed(1) + ' FPS';
+            }
             
             // Update system info with safety checks
-            if (data.cpu_temp !== undefined) document.getElementById('cpu-temp').textContent = Math.round(data.cpu_temp) + '°C';
-            if (data.cpu_usage !== undefined) document.getElementById('cpu-usage').textContent = data.cpu_usage + '%';
-            if (data.ram_usage !== undefined) document.getElementById('ram-usage').textContent = data.ram_usage + '%';
-            if (data.uptime !== undefined) document.getElementById('uptime-sys').textContent = data.uptime;
+            if (data.cpu_temp !== undefined) {
+                const cpuTempElement = document.getElementById('cpu-temp');
+                if (cpuTempElement) cpuTempElement.textContent = Math.round(data.cpu_temp) + '°C';
+            }
+            if (data.cpu_usage !== undefined) {
+                const cpuUsageElement = document.getElementById('cpu-usage');
+                if (cpuUsageElement) cpuUsageElement.textContent = data.cpu_usage + '%';
+            }
+            if (data.ram_usage !== undefined) {
+                const ramUsageElement = document.getElementById('ram-usage');
+                if (ramUsageElement) ramUsageElement.textContent = data.ram_usage + '%';
+            }
+            if (data.uptime !== undefined) {
+                const uptimeElement = document.getElementById('uptime-sys');
+                if (uptimeElement) uptimeElement.textContent = data.uptime;
+            }
 
             // Update log without flickering
             if (data.detection_log) {
@@ -219,9 +247,12 @@ function updateStats() {
                     chart.appendChild(bar);
                 });
             }
+            } catch (error) {
+                console.error('VespAI Dashboard: Error processing stats data:', error);
+            }
         })
         .catch(error => {
-            console.error('Error fetching stats:', error);
+            console.error('VespAI Dashboard: Error fetching stats:', error);
         });
 }
 
