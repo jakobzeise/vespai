@@ -248,12 +248,24 @@ class ModelManager:
         """Load model from GitHub repository."""
         import torch
         
-        return torch.hub.load('ultralytics/yolov5', 'custom',
-                             path=self.model_path,
-                             force_reload=True,
-                             trust_repo=True,
-                             skip_validation=True,
-                             _verbose=False)
+        try:
+            return torch.hub.load('ultralytics/yolov5', 'custom',
+                                 path=self.model_path,
+                                 force_reload=True,
+                                 trust_repo=True,
+                                 skip_validation=True,
+                                 _verbose=False)
+        except Exception as e:
+            logger.warning("Standard loading failed, trying with weights_only=False: %s", e)
+            # Fallback for PyTorch 2.6+ compatibility
+            import torch.serialization
+            torch.serialization.add_safe_globals(['models.yolo.DetectionModel'])
+            return torch.hub.load('ultralytics/yolov5', 'custom',
+                                 path=self.model_path,
+                                 force_reload=True,
+                                 trust_repo=True,
+                                 skip_validation=True,
+                                 _verbose=False)
     
     def _configure_model(self):
         """Configure model after loading."""
