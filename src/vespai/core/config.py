@@ -57,8 +57,8 @@ class VespAIConfig:
             'web_host': '0.0.0.0',
             'web_port': 5000,
             
-            # SMS settings
-            'enable_sms': True,
+            # SMS settings (disabled by default, use --sms to enable)
+            'enable_sms': False,
             'lox24_api_key': '',
             'phone_number': '',
             'lox24_sender': 'VespAI',
@@ -194,6 +194,16 @@ class VespAIConfig:
                           default=self.config['web_port'],
                           help='Web server port')
         
+        # SMS alerts
+        parser.add_argument('--sms',
+                          action='store_true',
+                          default=False,
+                          help='Enable SMS alerts (requires LOX24_API_KEY and PHONE_NUMBER)')
+        parser.add_argument('--no-sms',
+                          action='store_true',
+                          default=False,
+                          help='Disable SMS alerts')
+        
         # Parse arguments
         parsed_args = parser.parse_args(args)
         
@@ -227,7 +237,12 @@ class VespAIConfig:
                 value = getattr(args, arg_key)
                 if value is not None:
                     self.config[config_key] = value
-                    logger.debug("Updated %s from command line: %s", config_key, value)
+        
+        # Handle SMS enable/disable flags
+        if hasattr(args, 'sms') and args.sms:
+            self.config['enable_sms'] = True
+        elif hasattr(args, 'no_sms') and args.no_sms:
+            self.config['enable_sms'] = False
     
     def get(self, key: str, default=None) -> Any:
         """

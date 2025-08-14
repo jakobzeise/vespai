@@ -4,8 +4,16 @@
 // Custom orange neon cursor
 let cursor = null;
 
-// Initialize custom cursor
+// Initialize custom cursor (only on desktop)
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if this is a mobile/touch device
+    const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 640;
+    
+    if (isMobile) {
+        console.log('VespAI Dashboard: Mobile device detected, skipping custom cursor');
+        return;
+    }
+    
     console.log('VespAI Dashboard: Initializing custom orange neon cursor...');
     
     try {
@@ -271,8 +279,8 @@ function updateStats() {
                         bar.style.background = 'rgba(255,255,255,0.1)';
                     }
 
-                    bar.innerHTML = `<span class="time-bar-label">${hour.hour}h</span>`;
-                    bar.title = `${hour.hour}:00 - Velutina: ${hour.velutina}, Crabro: ${hour.crabro}`;
+                    bar.innerHTML = `<span class="time-bar-label">${hour.hour}</span>`;
+                    bar.title = `${hour.hour} - Velutina: ${hour.velutina}, Crabro: ${hour.crabro}`;
                     chart.appendChild(bar);
                 });
             }

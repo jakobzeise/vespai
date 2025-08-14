@@ -179,14 +179,24 @@ def register_routes(app, stats, hourly_detections, app_instance):
         except:
             stats["cpu_temp"] = 0
 
-        # Prepare hourly data for chart
+        # Prepare 4-hour grouped data for chart (6 blocks total)
         hourly_data = []
-        for hour in range(24):
+        for block in range(6):  # 6 blocks of 4 hours each
+            start_hour = block * 4
+            end_hour = start_hour + 3
+            
+            # Sum up detections for this 4-hour block
+            block_velutina = 0
+            block_crabro = 0
+            for hour in range(start_hour, start_hour + 4):
+                block_velutina += hourly_detections[hour]["velutina"]
+                block_crabro += hourly_detections[hour]["crabro"]
+            
             hourly_data.append({
-                "hour": f"{hour:02d}:00",
-                "velutina": hourly_detections[hour]["velutina"],
-                "crabro": hourly_detections[hour]["crabro"],
-                "total": hourly_detections[hour]["velutina"] + hourly_detections[hour]["crabro"]
+                "hour": f"{start_hour:02d}-{end_hour:02d}h",
+                "velutina": block_velutina,
+                "crabro": block_crabro,
+                "total": block_velutina + block_crabro
             })
 
         response_data = dict(stats)
