@@ -621,7 +621,48 @@ body::before {
         object-fit: cover;
     }
     .detection-log {
-        height: 350px;
+        height: 300px;
+        margin: 1rem 0;
+    }
+    
+    /* Better mobile log entries */
+    .log-entry {
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .log-time {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    /* Improve main grid for mobile */
+    .main-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Better mobile layout */
+    .container {
+        padding: 0 0.75rem;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    /* Fix background zoom issues */
+    body {
+        overflow-x: hidden;
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+    }
+    
+    /* Ensure no horizontal scroll */
+    * {
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .logo h1 {
         font-size: 1.2rem;
@@ -629,5 +670,61 @@ body::before {
     .logo-icon {
         width: 40px;
         height: 40px;
+    }
+    
+    /* Mobile system info */
+    .system-info {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .system-value {
+        font-size: 1.2rem;
+    }
+    
+    .system-label {
+        font-size: 0.75rem;
+    }
+    
+    /* Mobile chart */
+    .chart-card {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .time-chart {
+        height: 150px;
+        gap: 0.25rem;
+    }
+    
+    .time-bar {
+        min-height: 3px;
+        max-width: 20px;
+    }
+    
+    .time-bar-label {
+        font-size: 0.6rem;
+        bottom: -20px;
+    }
+    
+    /* Touch-friendly buttons */
+    .fullscreen-btn {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Video header mobile */
+    .video-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .video-controls {
+        justify-content: center;
     }
 }
