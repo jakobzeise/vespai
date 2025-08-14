@@ -14,9 +14,15 @@ import time
 import datetime
 import numpy as np
 import logging
+import warnings
 from typing import Tuple, Optional, Dict, Any, List
 from collections import deque
 import torch
+
+# Suppress specific PyTorch autocast deprecation warning from YOLOv5
+warnings.filterwarnings("ignore", message=".*torch.cuda.amp.autocast.*", category=FutureWarning)
+# Suppress pkg_resources deprecation warning
+warnings.filterwarnings("ignore", message=".*pkg_resources.*", category=UserWarning)
 
 # Fix PyTorch 2.6+ weights_only issue
 original_load = torch.load
