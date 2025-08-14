@@ -6,26 +6,30 @@ let cursor = null;
 
 // Initialize custom cursor
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('VespAI Dashboard: Initializing custom orange neon cursor...');
     // Create cursor element
     cursor = document.createElement('div');
     cursor.style.cssText = `
         position: fixed;
-        width: 12px;
-        height: 12px;
+        width: 16px;
+        height: 16px;
         background: #ff6600;
+        border: 2px solid #ffffff;
         border-radius: 50%;
         pointer-events: none;
-        z-index: 10000;
+        z-index: 99999;
         box-shadow: 
-            0 0 10px #ff6600,
-            0 0 20px #ff6600,
-            0 0 30px #ff6600,
-            inset 0 0 10px #ffffff;
+            0 0 15px #ff6600,
+            0 0 25px #ff6600,
+            0 0 35px #ff6600,
+            0 0 45px rgba(255, 102, 0, 0.8);
         transition: all 0.05s ease;
         transform: translate(-50%, -50%);
         opacity: 1;
+        mix-blend-mode: screen;
     `;
     document.body.appendChild(cursor);
+    console.log('VespAI Dashboard: Custom cursor created and added to page!');
     
     // Animate the glow
     setInterval(() => {
