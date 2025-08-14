@@ -130,10 +130,10 @@ class VespAISetup:
                 logger.info("🔧 Virtual environment created!")
                 if platform.system() == 'Windows':
                     logger.info("To activate: %s\\Scripts\\activate", venv_path)
-                    logger.info("To run VespAI: %s\\Scripts\\python main.py --web", venv_path)
+                    logger.info("To run VespAI: %s\\Scripts\\python vespai.py --web", venv_path)
                 else:
                     logger.info("To activate: source %s/bin/activate", venv_path)
-                    logger.info("To run VespAI: %s/bin/python main.py --web", venv_path)
+                    logger.info("To run VespAI: %s/bin/python vespai.py --web", venv_path)
                 logger.info("")
             
             return True
@@ -284,7 +284,7 @@ WEB_PORT=8081
         logger.info("")
         logger.info("Next steps:")
         logger.info("1. Customize .env.template and save as .env (optional)")
-        logger.info("2. Run: python main.py --web")
+        logger.info("2. Run: python vespai.py --web")
         logger.info("3. Open http://localhost:8081 in your browser")
         logger.info("")
         

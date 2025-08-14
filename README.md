@@ -1,17 +1,21 @@
 # VespAI - Hornet Detection System
 
-VespAI is a real-time hornet detection system that uses YOLOv5 computer vision to identify and alert on Asian hornets (Vespa velutina) and European hornets (Vespa crabro). The system provides a web dashboard, SMS alerts, and comprehensive logging for monitoring hornet activity.
+🐝 **Professional-grade hornet detection system** with real-time computer vision, web dashboard, and SMS alerts.
+
+VespAI uses YOLOv5 deep learning to identify and differentiate between Asian hornets (Vespa velutina) and European hornets (Vespa crabro) in real-time. Built with a **modular, testable architecture** and comprehensive monitoring capabilities.
 
 **Based on the research:** *VespAI: a deep learning-based system for the detection of invasive hornets* published in Communications Biology (2024). DOI: [10.1038/s42003-024-05979-z](https://doi.org/10.1038/s42003-024-05979-z)
 
-## Features
+## ✨ Features
 
-- **Real-time Detection**: YOLOv5-based computer vision for accurate hornet identification
-- **Web Dashboard**: Live video feed with statistics and detection history
-- **SMS Alerts**: Automated notifications via Lox24 API with rate limiting
-- **Motion Detection**: Optional motion-based optimization to reduce false positives
-- **Data Logging**: Comprehensive detection logs and hourly statistics
-- **Mobile Responsive**: Web interface optimized for mobile devices
+- 🔍 **Real-time Detection**: YOLOv5-based computer vision with custom hornet model
+- 📊 **Web Dashboard**: Live video feed with statistics and detection analytics
+- 📱 **SMS Alerts**: Automated notifications via Lox24 API with intelligent rate limiting
+- 🎯 **Motion Detection**: CPU-efficient motion-based optimization
+- 📈 **Data Analytics**: Comprehensive logging, hourly statistics, and detection history
+- 📱 **Mobile Responsive**: Optimized web interface for all devices
+- 🧪 **Fully Tested**: 62 comprehensive tests ensuring reliability
+- 🏗️ **Modular Architecture**: Clean, maintainable codebase with separation of concerns
 
 ## 🚀 Quick Start
 
@@ -39,7 +43,7 @@ chmod +x scripts/raspberry-pi-setup.sh
 ```bash
 # Automated setup handles everything
 python scripts/setup.py
-python main.py --web
+python vespai.py --web
 ```
 
 **Raspberry Pi (requires virtual environment):**
@@ -55,7 +59,7 @@ source vespai-env/bin/activate
 
 # Setup and run
 python scripts/setup.py
-python main.py --web --resolution 720p --motion
+python vespai.py --web --resolution 720p --motion
 ```
 
 ### Option 3: Manual Setup
@@ -77,13 +81,13 @@ cp .env.template .env
 ### 2. Run the System
 ```bash
 # Basic usage with web interface
-python main.py --web
+python vespai.py --web
 
 # With motion detection and image saving
-python main.py --web --motion --save
+python vespai.py --web --motion --save
 
 # Performance mode for Raspberry Pi
-python main.py --web --resolution 720p --motion --conf 0.7
+python vespai.py --web --resolution 720p --motion --conf 0.7
 ```
 
 ### 3. Access Dashboard
@@ -119,7 +123,7 @@ SAVE_DIRECTORY=monitor/detections
 ```bash
 
 # Usage:
-python main.py [OPTIONS]
+python vespai.py [OPTIONS]
 
 Options:
   --web                    Enable web dashboard (port 5000)
@@ -191,32 +195,32 @@ sudo apt update && sudo apt install python3-opencv python3-pip git
 ```bash
 
 # Start with web interface
-python main.py --web
+python vespai.py --web
 
 # Add motion detection for better performance
-python main.py --web --motion
+python vespai.py --web --motion
 ```
 
 ### Production Deployment
 ```bash
 # Full featured production setup
-python main.py --web --motion --save --conf 0.85
+python vespai.py --web --motion --save --conf 0.85
 
 # Raspberry Pi optimized
-python main.py --web --resolution 720p --motion --conf 0.7
+python vespai.py --web --resolution 720p --motion --conf 0.7
 
 # Process recorded video
-python main.py --video input.mp4 --save --conf 0.9
+python vespai.py --video input.mp4 --save --conf 0.9
 ```
 
 ### Development/Testing
 ```bash
 
 # High verbosity for debugging
-python main.py --web --print --conf 0.7
+python vespai.py --web --print --conf 0.7
 
 # Test with 720p resolution
-python main.py --web --resolution 720p
+python vespai.py --web --resolution 720p
 ```
 
 ## Web Interface
@@ -279,7 +283,7 @@ python scripts/setup.py
 
 # Run VespAI (remember to activate venv first)
 source vespai-env/bin/activate
-python main.py --web --resolution 720p --motion
+python vespai.py --web --resolution 720p --motion
 ```
 
 ### Security Considerations
@@ -299,30 +303,20 @@ python main.py --web --resolution 720p --motion
 ### Project Structure
 ```
 vespai/
-├── main.py                     # Main entry point
-├── config/
-│   ├── __init__.py
-│   └── settings.py            # Configuration management
-├── detection/
-│   ├── __init__.py
-│   ├── engine.py              # YOLOv5 detection logic
-│   └── motion.py              # Motion detection
-├── services/
-│   ├── __init__.py
-│   └── sms.py                 # SMS alert service
-├── utils/
-│   ├── __init__.py
-│   └── stats.py               # Statistics management
-├── web/
-│   ├── __init__.py
-│   ├── app.py                 # Flask application
-│   ├── routes.py              # Web routes
-│   ├── templates/
-│   │   └── dashboard.html     # Dashboard template
-│   └── static/
-│       ├── css/               # Stylesheets (to be added)
-│       └── js/
-│           └── dashboard.js   # Dashboard JavaScript
+├── vespai.py                   # Main entry point
+├── src/
+│   └── vespai/
+│       ├── main.py             # Application class
+│       ├── core/
+│       │   ├── detection.py    # Detection engine
+│       │   └── config.py       # Configuration
+│       ├── sms/
+│       │   └── lox24.py        # SMS alerts
+│       └── web/
+│           └── routes.py       # Web interface
+├── tests/
+│   ├── unit/                  # Unit tests (49 tests)
+│   └── integration/           # Integration tests (13 tests)
 ├── requirements.txt           # Python dependencies
 ├── .env.example              # Environment template
 ├── .gitignore                # Git ignore rules

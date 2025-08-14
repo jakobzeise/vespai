@@ -14,7 +14,7 @@ cd vespai
 python scripts/setup.py
 
 # Start the system
-python main.py --web
+python vespai.py --web
 ```
 
 ### Raspberry Pi (PEP 668 Compatible)
@@ -39,7 +39,7 @@ chmod +x scripts/raspberry-pi-setup.sh
 python3 -m venv vespai-env
 source vespai-env/bin/activate
 python scripts/setup.py
-python main.py --web
+python vespai.py --web
 ```
 
 Open http://localhost:8081 in your browser.
@@ -73,12 +73,14 @@ The setup script handles everything automatically:
 
 **Standard Systems:**
 ```bash
+
 cd vespai
 python scripts/setup.py
 ```
 
 **Raspberry Pi (requires virtual environment):**
 ```bash
+
 # Clone to home directory first (recommended for permissions)
 cd ~
 git clone https://github.com/jakobzeise/vespai.git
@@ -102,6 +104,7 @@ python scripts/setup.py
 
 **For all models (optional):**
 ```bash
+
 python scripts/setup.py --all-models
 ```
 
@@ -216,16 +219,16 @@ CONFIDENCE_THRESHOLD=0.7    # Lower for better detection
 **Standard Systems:**
 ```bash
 # Start with web dashboard
-python main.py --web
+python vespai.py --web
 
 # Start with motion detection (saves CPU)
-python main.py --web --motion
+python vespai.py --web --motion
 
 # Process video file instead of camera
-python main.py --web --video hornets.mp4
+python vespai.py --web --video hornets.mp4
 
 # Save all detection images
-python main.py --web --save
+python vespai.py --web --save
 ```
 
 **Raspberry Pi (activate virtual environment first):**
@@ -234,16 +237,16 @@ python main.py --web --save
 source vespai-env/bin/activate
 
 # Start with web dashboard (optimized for Pi)
-python main.py --web --resolution 720p --motion
+python vespai.py --web --resolution 720p --motion
 
 # Performance mode
-python main.py --web --resolution 640x480 --motion --conf 0.7
+python vespai.py --web --resolution 640x480 --motion --conf 0.7
 ```
 
 ### Command Line Options
 
 ```bash
-python main.py --web [OPTIONS]
+python vespai.py --web [OPTIONS]
 
 Options:
   --conf FLOAT          Detection confidence (0.0-1.0) [default: 0.8]
@@ -261,16 +264,16 @@ Options:
 
 ```bash
 # High accuracy mode
-python main.py --web --conf 0.9 --save
+python vespai.py --web --conf 0.9 --save
 
 # Performance mode for Raspberry Pi
-python main.py --web --resolution 720p --motion --conf 0.7
+python vespai.py --web --resolution 720p --motion --conf 0.7
 
 # Process recorded video
-python main.py --web --video /path/to/hornet_video.mp4 --save
+python vespai.py --web --video /path/to/hornet_video.mp4 --save
 
 # Debug mode
-python main.py --web --print
+python vespai.py --web --print
 ```
 
 ### Web Interface Access
@@ -351,16 +354,16 @@ curl http://localhost:8081
 tail -f logs/vespai.log
 
 # Try different port
-python main.py --web --web-port 5000
+python vespai.py --web --web-port 5000
 ```
 
 **Performance issues on Raspberry Pi:**
 ```bash
 # Use lower resolution
-python main.py --web --resolution 640x480
+python vespai.py --web --resolution 640x480
 
 # Enable motion detection
-python main.py --web --motion
+python vespai.py --web --motion
 
 # Check GPU memory split
 vcgencmd get_mem gpu  # Should be 128+
@@ -396,7 +399,7 @@ vcgencmd get_camera
 free -h
 
 # Reduce camera resolution
-python main.py --web --resolution 640x480
+python vespai.py --web --resolution 640x480
 
 # Enable swap if needed (not recommended for SD cards)
 sudo dphys-swapfile swapoff
@@ -411,10 +414,10 @@ sudo dphys-swapfile swapon
 cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
 
 # Enable motion detection to reduce processing
-python main.py --web --motion --min-motion-area 8000
+python vespai.py --web --motion --min-motion-area 8000
 
 # Use lower confidence threshold
-python main.py --web --conf 0.6
+python vespai.py --web --conf 0.6
 ```
 
 ## 🔬 Model Information
@@ -466,7 +469,7 @@ After=network.target
 Type=simple
 User=pi
 WorkingDirectory=/home/pi/vespai
-ExecStart=/usr/bin/python3 /home/pi/vespai/main.py --web
+ExecStart=/usr/bin/python3 /home/pi/vespai/vespai.py --web
 Restart=always
 RestartSec=10
 

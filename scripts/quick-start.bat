@@ -30,5 +30,5 @@ echo Open your browser to: http://localhost:8081
 echo Press Ctrl+C to stop the server
 echo.
 
-python main.py --web
+python vespai.py --web
 pause
