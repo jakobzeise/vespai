@@ -50,6 +50,10 @@ import requests
 import torch
 from flask import Flask, Response, render_template_string, jsonify
 
+# Fix PyTorch 2.6+ weights_only issue
+original_load = torch.load
+torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only=False)
+
 # ───────────────────────── Configuration ─────────────────────────
 # Load configuration from environment variables
 LOX24_API_KEY = os.getenv("LOX24_API_KEY", "")  # Customer Number:API v2 Key
