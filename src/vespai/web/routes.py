@@ -186,7 +186,8 @@ def register_routes(app, stats, hourly_detections, web_frame, web_lock):
         
         # Convert deque to list for JSON serialization
         response_data["detection_log"] = list(response_data["detection_log"])
-        response_data["hourly_stats"] = list(response_data["hourly_stats"])
+        if "hourly_stats" in response_data:
+            response_data["hourly_stats"] = list(response_data["hourly_stats"])
         
         # Format timestamps
         if response_data["last_detection_time"]:
