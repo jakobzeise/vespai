@@ -9,7 +9,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/style.css?v=2025081403">
+    <link rel="stylesheet" href="/static/css/style.css?v=2025081404">
 </head>
 <body>
     <!-- Header -->
@@ -109,7 +109,10 @@
 
         <!-- Hourly Chart -->
         <div class="chart-card">
-            <h3 style="margin-bottom: 1rem;"><i class="fas fa-chart-bar" style="color: var(--honey);"></i> Detections per 4-Hour Block (Last 24h)</h3>
+            <h3 style="margin-bottom: 1rem;" id="chart-title">
+                <i class="fas fa-chart-bar" style="color: var(--honey);"></i> 
+                <span class="chart-title-text">Detections per Hour (Last 24h)</span>
+            </h3>
             <div class="time-chart" id="hourly-chart">
                 <!-- Chart bars will be inserted here -->
             </div>
@@ -148,7 +151,7 @@
                 <p class="footer-tagline">Crafting innovative digital experiences with clean, smart design</p>
             </div>
             <div class="footer-links">
-                <a href="mailto:contact@zeisedigital.com" class="footer-link">
+                <a href="mailto:info@zeisedigital.com" class="footer-link">
                     <i class="fas fa-envelope"></i> Contact
                 </a>
                 <a href="https://zeisedigital.com" class="footer-link" target="_blank">
@@ -161,6 +164,6 @@
         </div>
     </footer>
 
-    <script src="/static/js/dashboard.js?v=2025081403"></script>
+    <script src="/static/js/dashboard.js?v=2025081404"></script>
 </body>
 </html>

@@ -255,15 +255,29 @@ function updateStats() {
                 updateLog(data.detection_log);
             }
 
-            // Update hourly chart
-            if (data.hourly_data && (Date.now() - lastChartUpdate > 10000)) {
+            // Update hourly chart - use different data based on screen size
+            if ((data.hourly_data_24h || data.hourly_data_4h) && (Date.now() - lastChartUpdate > 10000)) {
                 lastChartUpdate = Date.now();
                 const chart = document.getElementById('hourly-chart');
                 chart.innerHTML = '';
                 
-                const maxVal = Math.max(...data.hourly_data.map(h => h.total), 1);
+                // Choose dataset based on screen size
+                const isMobile = window.innerWidth <= 768;
+                const chartData = isMobile ? data.hourly_data_4h : data.hourly_data_24h;
                 
-                data.hourly_data.forEach(hour => {
+                if (!chartData) return;
+                
+                // Update chart title based on view
+                const titleElement = document.querySelector('.chart-title-text');
+                if (titleElement) {
+                    titleElement.textContent = isMobile ? 
+                        'Detections per 4-Hour Block (Last 24h)' : 
+                        'Detections per Hour (Last 24h)';
+                }
+                
+                const maxVal = Math.max(...chartData.map(h => h.total), 1);
+                
+                chartData.forEach(hour => {
                     const bar = document.createElement('div');
                     bar.className = 'time-bar';
                     const height = Math.max(((hour.total / maxVal) * 100), 2);

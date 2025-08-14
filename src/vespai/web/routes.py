@@ -179,8 +179,20 @@ def register_routes(app, stats, hourly_detections, app_instance):
         except:
             stats["cpu_temp"] = 0
 
-        # Prepare 4-hour grouped data for chart (6 blocks total)
-        hourly_data = []
+        # Prepare both 24-hour detailed data (for desktop) and 4-hour grouped data (for mobile)
+        
+        # 24-hour detailed data (matching original)
+        hourly_data_24h = []
+        for hour in range(24):
+            hourly_data_24h.append({
+                "hour": f"{hour:02d}:00",
+                "velutina": hourly_detections[hour]["velutina"],
+                "crabro": hourly_detections[hour]["crabro"],
+                "total": hourly_detections[hour]["velutina"] + hourly_detections[hour]["crabro"]
+            })
+        
+        # 4-hour grouped data (for mobile)
+        hourly_data_4h = []
         for block in range(6):  # 6 blocks of 4 hours each
             start_hour = block * 4
             end_hour = start_hour + 3
@@ -192,7 +204,7 @@ def register_routes(app, stats, hourly_detections, app_instance):
                 block_velutina += hourly_detections[hour]["velutina"]
                 block_crabro += hourly_detections[hour]["crabro"]
             
-            hourly_data.append({
+            hourly_data_4h.append({
                 "hour": f"{start_hour:02d}-{end_hour:02d}h",
                 "velutina": block_velutina,
                 "crabro": block_crabro,
@@ -200,7 +212,9 @@ def register_routes(app, stats, hourly_detections, app_instance):
             })
 
         response_data = dict(stats)
-        response_data["hourly_data"] = hourly_data
+        response_data["hourly_data"] = hourly_data_24h  # Default to 24h for backward compatibility
+        response_data["hourly_data_24h"] = hourly_data_24h  # Detailed 24-hour data
+        response_data["hourly_data_4h"] = hourly_data_4h   # Grouped 4-hour data
         
         # Add missing fields with defaults if not present
         response_data.setdefault("sms_sent", 0)
