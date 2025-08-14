@@ -70,6 +70,9 @@ DOMAIN_NAME = os.getenv("DOMAIN_NAME", "localhost")  # Your domain name
 USE_HTTPS = os.getenv("USE_HTTPS", "false").lower() == "true"  # HTTPS enabled
 PUBLIC_URL = f"https://{DOMAIN_NAME}" if USE_HTTPS else f"http://{DOMAIN_NAME}"
 
+# Model configuration
+MODEL_PATH = os.getenv("MODEL_PATH", "models/yolov5s-all-data.pt")  # Path to YOLOv5 model
+
 # Validate critical configuration
 if not LOX24_API_KEY and os.getenv("ENABLE_SMS", "true").lower() == "true":
     print("WARNING: LOX24_API_KEY not set - SMS alerts disabled")
@@ -1728,13 +1731,13 @@ def main():
 
     # Load YOLOv5 Model
     print("Loading YOLOv5 model...")
-    weights_pt = os.path.join(args.root,
-                              "/opt/vespai/models/yolov5-params/yolov5s-all-data.pt")
+    weights_pt = MODEL_PATH
 
-    # Alternative paths to try if main path doesn't exist
+    # Alternative paths to try if configured path doesn't exist
     if not os.path.exists(weights_pt):
         alternative_paths = [
-            "models/yolov5s-all-data.pt",  # Custom hornet model (priority)
+            "/opt/vespai/models/yolov5s-all-data.pt",  # Legacy path
+            "models/yolov5s-all-data.pt",  # Custom hornet model
             "yolov5s-all-data.pt",
             "yolov5s.pt",  # Default YOLOv5 small model
             "models/yolov5s.pt",
