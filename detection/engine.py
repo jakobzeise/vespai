@@ -64,9 +64,8 @@ class DetectionEngine:
         """Try alternative model paths"""
         alternative_paths = [
             "models/yolov5s-all-data.pt",  # VespAI hornet model
-            "models/yolov5s-all-data.pt", 
+            "yolov5s.pt",  # Standard YOLOv5 model
             "models/yolov5s.pt",
-            "yolov5s.pt",
             os.path.join(os.getcwd(), "models", "yolov5s.pt"),
             "yolov5s-all-data.pt"
         ]
@@ -81,22 +80,35 @@ class DetectionEngine:
         """Try different YOLOv5 loading methods"""
         model = None
         
-        # Method 1: Direct PyTorch loading with weights_only=False
+        # Method 1: Try ultralytics YOLO (best compatibility)
         try:
+            from ultralytics import YOLO
             import torch
             
-            # Load model directly with weights_only=False to handle PyTorch 2.8
-            logger.info("Trying direct PyTorch model loading...")
-            checkpoint = torch.load(self.model_path, map_location='cpu', weights_only=False)
+            # Load model with ultralytics YOLO
+            logger.info("Trying ultralytics YOLO model loading...")
+            model = YOLO(self.model_path)
+            logger.info("Model loaded via ultralytics YOLO")
+            return model
             
-            # Try ultralytics YOLO first
+        except Exception as e:
+            logger.warning(f"Ultralytics YOLO loading failed: {e}")
+        
+        # Method 2: Fallback to standard YOLOv5 if custom model fails
+        if "yolov5s-all-data.pt" in self.model_path:
+            logger.info("Custom model failed, trying standard YOLOv5...")
             try:
                 from ultralytics import YOLO
-                model = YOLO(self.model_path)
-                logger.info("Model loaded via ultralytics YOLO")
+                # Download and use standard YOLOv5s
+                model = YOLO('yolov5s.pt')  # This will auto-download if needed
+                logger.warning("⚠️ Using standard YOLOv5 model - not optimized for hornets")
                 return model
             except Exception as e:
-                logger.debug(f"Ultralytics YOLO failed: {e}")
+                logger.debug(f"Standard YOLO fallback failed: {e}")
+        
+        # Method 3: Try torch.hub with weights_only fix  
+        try:
+            import torch
             
             # Try torch.hub with weights_only fix
             original_load = torch.load
@@ -107,7 +119,7 @@ class DetectionEngine:
                     'ultralytics/yolov5', 'custom',
                     path=self.model_path,
                     device='cpu',
-                    force_reload=False,
+                    force_reload=True,  # Force reload to clear cache
                     trust_repo=True,
                     verbose=False
                 )
@@ -119,7 +131,7 @@ class DetectionEngine:
                 logger.debug(f"torch.hub with patch failed: {e}")
                 
         except Exception as e:
-            logger.warning(f"Direct PyTorch loading failed: {e}")
+            logger.warning(f"Torch.hub loading failed: {e}")
         
         # Method 2: Try yolov5 package with weights_only fix
         try:
