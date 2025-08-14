@@ -98,7 +98,13 @@ function updateLog(logData) {
 
     // Process each log entry
     logData.forEach((entry, index) => {
-        const entryId = `${entry.timestamp}-${entry.species}-${entry.frame_id}`;
+        // Validate entry data
+        if (!entry || !entry.timestamp || !entry.species) {
+            console.warn('VespAI Dashboard: Invalid log entry:', entry);
+            return;
+        }
+        
+        const entryId = `${entry.timestamp}-${entry.species}-${entry.frame_id || 'no-frame'}`;
         currentIds.add(entryId);
 
         // Only add if it's a new entry
@@ -106,8 +112,8 @@ function updateLog(logData) {
             const logEntry = document.createElement('div');
             logEntry.className = `log-entry new ${entry.species}` + (entry.frame_id ? ' clickable' : '');
             logEntry.innerHTML = `
-                <div class="log-time"><i class="fas fa-clock"></i> ${entry.timestamp}</div>
-                <div>${entry.species === 'velutina' ? 'Asian Hornet' : 'European Hornet'} detected (${entry.confidence}%)</div>
+                <div class="log-time"><i class="fas fa-clock"></i> ${entry.timestamp || 'Unknown time'}</div>
+                <div>${entry.species === 'velutina' ? 'Asian Hornet' : 'European Hornet'} detected (${entry.confidence || 'Unknown'}%)</div>
             `;
             logEntry.dataset.id = entryId;
             if (entry.frame_id) {
