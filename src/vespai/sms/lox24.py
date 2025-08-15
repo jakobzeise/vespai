@@ -5,7 +5,7 @@ VespAI SMS Module - Lox24 SMS API Integration
 This module handles SMS alerts for hornet detections using the Lox24 SMS service.
 Provides rate limiting, cost tracking, and comprehensive error handling.
 
-Author: VespAI Team
+Author: Jakob Zeise (Zeise Digital)
 Version: 1.0
 """
 

@@ -7,6 +7,8 @@ const translations = {
         'live': 'Live',
         'frames-processed': 'Frames Processed',
         'total-detections': 'Total Detections',
+        'vespa-velutina': 'Vespa Velutina',
+        'vespa-crabro': 'Vespa Crabro', 
         'sms-alerts': 'SMS Alerts',
         'sms-costs': 'SMS Costs',
         'live-detection-feed': 'Live Detection Feed',
@@ -23,13 +25,20 @@ const translations = {
         'chart-title-24h': 'Detections per Hour (Last 24h)',
         'chart-title-4h': 'Detections per 4-Hour Block (Last 24h)',
         'asian-hornet': 'Asian Hornet',
-        'european-hornet': 'European Hornet'
+        'european-hornet': 'European Hornet',
+        'uptime-prefix': 'Uptime:',
+        'per-hour': '/h',
+        'fps-suffix': 'FPS',
+        'detected': 'detected',
+        'confidence': 'confidence'
     },
     de: {
         'live': 'Live',
-        'frames-processed': 'Frames Verarbeitet',
+        'frames-processed': 'Bilder Verarbeitet',
         'total-detections': 'Gesamt Erkennungen',
-        'sms-alerts': 'SMS Alerts',
+        'vespa-velutina': 'Vespa Velutina',
+        'vespa-crabro': 'Vespa Crabro',
+        'sms-alerts': 'SMS Benachrichtigungen',
         'sms-costs': 'SMS Kosten',
         'live-detection-feed': 'Live Erkennungs-Feed',
         'fullscreen': 'Vollbild',
@@ -45,7 +54,12 @@ const translations = {
         'chart-title-24h': 'Erkennungen pro Stunde (Letzte 24h)',
         'chart-title-4h': 'Erkennungen pro 4-Stunden-Block (Letzte 24h)',
         'asian-hornet': 'Asiatische Hornisse',
-        'european-hornet': 'Europäische Hornisse'
+        'european-hornet': 'Europäische Hornisse',
+        'uptime-prefix': 'Laufzeit:',
+        'per-hour': '/h',
+        'fps-suffix': 'FPS',
+        'detected': 'erkannt',
+        'confidence': 'Sicherheit'
     }
 };
 
@@ -209,9 +223,12 @@ function updateLog(logData) {
                 (translations[currentLang]['asian-hornet'] || 'Asian Hornet') : 
                 (translations[currentLang]['european-hornet'] || 'European Hornet');
             
+            const detectedText = translations[currentLang]['detected'] || 'detected';
+            const confidenceText = translations[currentLang]['confidence'] || 'confidence';
+            
             logEntry.innerHTML = `
                 <div class="log-time"><i class="fas fa-clock"></i> ${entry.timestamp || 'Unknown time'}</div>
-                <div>${speciesText} detected (${entry.confidence || 'Unknown'}%)</div>
+                <div>${speciesText} ${detectedText} (${confidenceText}: ${entry.confidence || 'Unknown'}%)</div>
             `;
             logEntry.dataset.id = entryId;
             if (entry.frame_id) {
@@ -316,10 +333,11 @@ function updateStats() {
                 }
             }
 
-            // Update other stats
+            // Update other stats (with translation)
             const fpsElement = document.getElementById('fps');
             if (fpsElement) {
-                fpsElement.textContent = (data.fps || 0).toFixed(1) + ' FPS';
+                const fpsText = translations[currentLang]['fps-suffix'] || 'FPS';
+                fpsElement.textContent = (data.fps || 0).toFixed(1) + ' ' + fpsText;
             }
             
             // Update system info with safety checks

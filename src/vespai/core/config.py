@@ -5,7 +5,7 @@ VespAI Configuration Module
 Handles all configuration management including environment variables,
 command line arguments, and default settings.
 
-Author: VespAI Team
+Author: Jakob Zeise (Zeise Digital)
 Version: 1.0
 """
 

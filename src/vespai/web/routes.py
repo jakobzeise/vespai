@@ -21,7 +21,7 @@ Routes:
 - GET /frame/<id>: HTML page for viewing detection frames
 - GET /api/frames: List all available detection frames
 
-Author: VespAI Team
+Author: Jakob Zeise (Zeise Digital)
 Version: 1.0
 """
 

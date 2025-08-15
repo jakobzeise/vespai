@@ -5,7 +5,7 @@ VespAI Main Application
 Modular main application that coordinates all VespAI components for hornet detection.
 This replaces the monolithic web_preview.py with a clean, testable architecture.
 
-Author: VespAI Team  
+Author: Jakob Zeise (Zeise Digital)
 Version: 1.0
 """
 

@@ -5,6 +5,9 @@ VespAI Entry Point
 Simple entry point script for running the modular VespAI application.
 This script allows running VespAI from the project root directory.
 
+Author: Jakob Zeise (Zeise Digital)
+Version: 1.0
+
 Usage:
     python vespai.py --web --confidence 0.8
     python vespai.py --help

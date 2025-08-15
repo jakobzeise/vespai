@@ -10,10 +10,13 @@ VespAI uses YOLOv5 deep learning to identify and differentiate between Asian hor
 
 - 🔍 **Real-time Detection**: YOLOv5-based computer vision with custom hornet model
 - 📊 **Web Dashboard**: Live video feed with statistics and detection analytics
+- 🌍 **Bilingual Support**: Complete English/German interface with flag-based switching
 - 📱 **SMS Alerts**: Automated notifications via Lox24 API with intelligent rate limiting
 - 🎯 **Motion Detection**: CPU-efficient motion-based optimization
 - 📈 **Data Analytics**: Comprehensive logging, hourly statistics, and detection history
-- 📱 **Mobile Responsive**: Optimized web interface for all devices
+- 📱 **Mobile Responsive**: Optimized web interface with adaptive charts (24h/4h views)
+- 🎨 **Modern UI**: Custom orange neon cursor, honeycomb theme, smooth animations
+- ⚡ **Performance Optimized**: Non-blocking operations, data caching, reduced API calls
 - 🧪 **Fully Tested**: 62 comprehensive tests ensuring reliability
 - 🏗️ **Modular Architecture**: Clean, maintainable codebase with separation of concerns
 

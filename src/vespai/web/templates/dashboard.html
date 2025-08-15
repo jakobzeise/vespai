@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VespAI Monitor - Live Dashboard</title>
 
+    <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg">
+    <link rel="icon" type="image/png" href="/static/img/favicon.png" sizes="32x32">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css?t={{ timestamp }}">
@@ -52,25 +54,25 @@
             <div class="stat-card">
                 <div class="stat-value" style="color: #00ff88 !important;" id="frame-count">0</div>
                 <div class="stat-label" data-key="frames-processed">Frames Processed</div>
-                <div class="stat-detail" id="uptime">Uptime: 0h 0m</div>
+                <div class="stat-detail" id="uptime"><span data-key="uptime-prefix">Uptime:</span> 0h 0m</div>
             </div>
 
             <div class="stat-card danger">
                 <div class="stat-value" style="color: #ff0040 !important;" id="velutina-count">0</div>
-                <div class="stat-label">Vespa Velutina</div>
+                <div class="stat-label" data-key="vespa-velutina">Vespa Velutina</div>
                 <div class="stat-detail" id="velutina-last">-</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-value" style="color: #ff6600 !important;" id="crabro-count">0</div>
-                <div class="stat-label">Vespa Crabro</div>
+                <div class="stat-label" data-key="vespa-crabro">Vespa Crabro</div>
                 <div class="stat-detail" id="crabro-last">-</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-value" style="color: #00ff88 !important;" id="total-detections">0</div>
                 <div class="stat-label" data-key="total-detections">Total Detections</div>
-                <div class="stat-detail" id="detection-rate">0/h</div>
+                <div class="stat-detail" id="detection-rate">0<span data-key="per-hour">/h</span></div>
             </div>
 
             <div class="stat-card">
