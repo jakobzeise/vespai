@@ -1,0 +1,18 @@
+[Unit]
+Description=VespAI Hornet Detection System
+After=network.target
+
+[Service]
+Type=simple
+User=vespai
+Group=vespai
+WorkingDirectory=/home/vespai/vespai
+Environment="PATH=/home/vespai/vespai/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/home/vespai/vespai/start_vespai.sh
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/vespai/vespai/vespai.log
+StandardError=append:/home/vespai/vespai/vespai_error.log
+
+[Install]
+WantedBy=multi-user.target

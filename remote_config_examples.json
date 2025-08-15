@@ -1,0 +1,59 @@
+{
+  "examples": {
+    "run_modular_with_web": {
+      "mode": "modular",
+      "executable": "vespai.py",
+      "enabled": true,
+      "web_interface": true,
+      "motion_detection": true,
+      "save_detections": true,
+      "confidence": 0.8,
+      "resolution": "1920x1080",
+      "sms_alerts": false
+    },
+    "run_monolithic_version": {
+      "mode": "monolithic",
+      "executable": "web_preview.py",
+      "enabled": true,
+      "web_interface": true,
+      "motion_detection": false,
+      "save_detections": true,
+      "confidence": 0.75,
+      "resolution": "1280x720",
+      "sms_alerts": false
+    },
+    "run_legacy_with_sms": {
+      "mode": "legacy",
+      "executable": "legacy/web_preview.py",
+      "enabled": true,
+      "web_interface": true,
+      "motion_detection": true,
+      "save_detections": true,
+      "confidence": 0.8,
+      "resolution": "1920x1080",
+      "sms_alerts": true
+    },
+    "disable_vespai": {
+      "mode": "modular",
+      "enabled": false,
+      "comment": "System will not start VespAI after reboot"
+    },
+    "run_custom_script": {
+      "mode": "custom",
+      "executable": "test_camera.py",
+      "enabled": true,
+      "custom_args": "--debug --verbose"
+    },
+    "high_accuracy_mode": {
+      "mode": "modular",
+      "executable": "vespai.py",
+      "enabled": true,
+      "web_interface": true,
+      "motion_detection": true,
+      "save_detections": true,
+      "confidence": 0.95,
+      "resolution": "1920x1080",
+      "sms_alerts": true
+    }
+  }
+}

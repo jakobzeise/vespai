@@ -1,0 +1,19 @@
+[Unit]
+Description=VespAI Auto-Updating Hornet Detection System
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vespai
+Group=vespai
+WorkingDirectory=/home/vespai/vespai
+ExecStartPre=/bin/sleep 30
+ExecStart=/home/vespai/vespai/smart_start.sh
+Restart=always
+RestartSec=30
+StandardOutput=append:/home/vespai/vespai/vespai.log
+StandardError=append:/home/vespai/vespai/vespai_error.log
+
+[Install]
+WantedBy=multi-user.target

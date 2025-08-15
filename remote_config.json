@@ -1,0 +1,17 @@
+{
+  "mode": "modular",
+  "executable": "vespai.py",
+  "version_path": "src/vespai",
+  "enabled": true,
+  "auto_update": true,
+  "web_interface": true,
+  "motion_detection": true,
+  "save_detections": true,
+  "confidence": 0.8,
+  "resolution": "1920x1080",
+  "sms_alerts": false,
+  "custom_args": "",
+  "restart_on_update": true,
+  "log_level": "INFO",
+  "comment": "Change this file and push to git to control VespAI remotely"
+}
