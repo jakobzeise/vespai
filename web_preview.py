@@ -347,10 +347,6 @@ HTML_TEMPLATE = '''
             background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
         }
 
-        .stat-card.danger::before {
-            background: linear-gradient(90deg, var(--danger) 0%, var(--warning) 100%);
-        }
-
         .stat-value {
             font-size: 2.5rem;
             font-weight: 700;
@@ -901,8 +897,8 @@ HTML_TEMPLATE = '''
                 <div class="stat-detail" id="velutina-last">-</div>
             </div>
 
-            <div class="stat-card warning">
-                <div class="stat-value" style="color: var(--warning);" id="crabro-count">0</div>
+            <div class="stat-card danger">
+                <div class="stat-value" style="color: var(--danger);" id="crabro-count">0</div>
                 <div class="stat-label">Vespa Crabro</div>
                 <div class="stat-detail" id="crabro-last">-</div>
             </div>
