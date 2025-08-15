@@ -85,10 +85,8 @@ def register_routes(app, stats, hourly_detections, app_instance):
             str: HTML content for the main VespAI dashboard
         """
         response = app.make_response(render_template('dashboard.html', timestamp=int(time.time())))
-        # Prevent caching of the main dashboard page
-        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '0'
+        # Optimized caching for Raspberry Pi performance
+        response.headers['Cache-Control'] = 'public, max-age=300'  # 5 minute cache
         return response
 
     @app.route('/video_feed')
@@ -116,9 +114,9 @@ def register_routes(app, stats, hourly_detections, app_instance):
                         continue
                     frame = app_instance.web_frame.copy()
 
-                # Higher quality and no additional delay (matching original)
+                # Optimized quality for Raspberry Pi performance
                 (flag, encodedImage) = cv2.imencode(".jpg", frame,
-                                                    [cv2.IMWRITE_JPEG_QUALITY, 85])
+                                                    [cv2.IMWRITE_JPEG_QUALITY, 60])
                 if not flag:
                     continue
 

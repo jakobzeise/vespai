@@ -224,9 +224,10 @@ class VespAIApplication:
                 if velutina_count > 0 or crabro_count > 0:
                     self._handle_detection(velutina_count, crabro_count, frame_count, annotated_frame)
                 
-                # Update web frame
+                # Update web frame (optimized for Raspberry Pi)
                 if self.config.get('enable_web'):
-                    display_frame = cv2.resize(annotated_frame, (960, 540))
+                    # Reduce resolution for better Raspberry Pi performance
+                    display_frame = cv2.resize(annotated_frame, (640, 360))
                     with self.web_lock:
                         self.web_frame = display_frame.copy()
                 
@@ -236,8 +237,8 @@ class VespAIApplication:
                     print(f"Frame {frame_count}: {velutina_count} Velutina, {crabro_count} Crabro "
                           f"(confidence: {confidence:.1f}%)")
                 
-                # Frame rate control
-                frame_delay = self.config.get('frame_delay', 0.1)
+                # Frame rate control (optimized for Raspberry Pi)
+                frame_delay = self.config.get('frame_delay', 0.3)  # Slower for RPi performance
                 elapsed = time.time() - loop_start
                 if elapsed < frame_delay:
                     time.sleep(frame_delay - elapsed)

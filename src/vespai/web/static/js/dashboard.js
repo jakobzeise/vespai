@@ -433,8 +433,8 @@ function showDetectionFrame(frameId) {
     window.open(frameUrl, '_blank');
 }
 
-// Update stats every 5 seconds (further reduced for better performance)
-let statsInterval = setInterval(updateStats, 5000);
+// Update stats every 15 seconds (optimized for Raspberry Pi performance)
+let statsInterval = setInterval(updateStats, 15000);
 updateStats();
 
 // Prevent multiple intervals from running
