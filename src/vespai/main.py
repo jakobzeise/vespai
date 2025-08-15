@@ -201,6 +201,9 @@ class VespAIApplication:
                 frame_count += 1
                 fps_counter += 1
                 
+                # Update frame count in stats (for web dashboard)
+                self.detection_processor.stats['frame_id'] = frame_count
+                
                 # Update FPS calculation
                 if time.time() - fps_start_time >= 1.0:
                     self.detection_processor.stats['fps'] = fps_counter
