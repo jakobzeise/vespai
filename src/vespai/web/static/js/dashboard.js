@@ -50,7 +50,7 @@ const translations = {
         'contact': 'Kontakt',
         'visit-website': 'Website Besuchen',
         'footer-headline': 'Moderne & Effektive Apps für Ihr Unternehmen',
-        'footer-tagline': 'Wir unterstützen Unternehmen dabei, in der digitalen Landschaft durch innovative Lösungen zu gedeihen',
+        'footer-tagline': 'Wir unterstützen Unternehmen dabei, in der digitalen Welt durch innovative Lösungen zu gedeihen',
         'chart-title-24h': 'Erkennungen pro Stunde (Letzte 24h)',
         'chart-title-4h': 'Erkennungen pro 4-Stunden-Block (Letzte 24h)',
         'asian-hornet': 'Asiatische Hornisse',
