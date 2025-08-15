@@ -311,6 +311,16 @@ function updateStats() {
         .then(response => response.json())
         .then(data => {
             try {
+            // Check system health
+            if (data.system_health) {
+                if (data.system_health.status === 'warning') {
+                    console.warn('System may be frozen - no updates for', data.system_health.time_since_last_frame, 'seconds');
+                    // Visual indicator for frozen system
+                    document.body.style.filter = 'hue-rotate(180deg)';
+                } else {
+                    document.body.style.filter = '';
+                }
+            }
             // Update counters with animation
             updateValue('frame-count', data.frame_id || 0);
             updateValue('velutina-count', data.total_velutina || 0);

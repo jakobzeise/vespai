@@ -189,14 +189,34 @@ class VespAIApplication:
         fps_start_time = time.time()
         fps_counter = 0
         
+        # Add watchdog timer for system health
+        last_frame_time = time.time()
+        last_stats_update = time.time()
+        
         try:
             while self.running:
                 loop_start = time.time()
                 
-                # Read frame from camera
-                success, frame = self.camera_manager.read_frame()
-                if not success or frame is None:
-                    time.sleep(0.1)
+                # Watchdog: Detect if system is hanging
+                current_time = time.time()
+                if current_time - last_frame_time > 30:  # No frame for 30 seconds
+                    logger.warning("System appears to be hanging - attempting recovery...")
+                    self._attempt_recovery()
+                    last_frame_time = current_time
+                
+                # Read frame from camera with timeout
+                try:
+                    success, frame = self.camera_manager.read_frame()
+                    if not success or frame is None:
+                        logger.warning("Failed to read frame, retrying...")
+                        time.sleep(0.1)
+                        continue
+                        
+                    last_frame_time = current_time
+                    
+                except Exception as e:
+                    logger.error(f"Camera error: {e}")
+                    time.sleep(1)
                     continue
                 
                 frame_count += 1
@@ -215,22 +235,36 @@ class VespAIApplication:
                     fps_counter = 0
                     fps_start_time = time.time()
                 
-                # Run detection
-                results = self.model_manager.predict(frame)
-                velutina_count, crabro_count, annotated_frame = self.detection_processor.process_detections(
-                    results, frame, frame_count, self.config.get('confidence_threshold')
-                )
+                # Run detection with error handling
+                try:
+                    results = self.model_manager.predict(frame)
+                    velutina_count, crabro_count, annotated_frame = self.detection_processor.process_detections(
+                        results, frame, frame_count, self.config.get('confidence_threshold')
+                    )
+                except Exception as e:
+                    logger.error(f"Detection error: {e}")
+                    # Use original frame if detection fails
+                    velutina_count = crabro_count = 0
+                    annotated_frame = frame.copy()
                 
                 # Handle detections
                 if velutina_count > 0 or crabro_count > 0:
                     self._handle_detection(velutina_count, crabro_count, frame_count, annotated_frame)
                 
-                # Update web frame (optimized for Raspberry Pi)
+                # Update web frame (optimized for Raspberry Pi) with error handling
                 if self.config.get('enable_web'):
-                    # Reduce resolution for better Raspberry Pi performance
-                    display_frame = cv2.resize(annotated_frame, (640, 360))
-                    with self.web_lock:
-                        self.web_frame = display_frame.copy()
+                    try:
+                        # Reduce resolution for better Raspberry Pi performance
+                        display_frame = cv2.resize(annotated_frame, (640, 360))
+                        with self.web_lock:
+                            self.web_frame = display_frame.copy()
+                    except Exception as e:
+                        logger.error(f"Web frame update error: {e}")
+                
+                # Force stats update every 10 seconds to keep web interface alive
+                if current_time - last_stats_update > 10:
+                    self.detection_processor.stats['last_update'] = current_time
+                    last_stats_update = current_time
                 
                 # Print detection info if enabled
                 if self.config.get('print_detections') and (velutina_count > 0 or crabro_count > 0):
@@ -348,6 +382,31 @@ class VespAIApplication:
             import os
             os._exit(0)
         self._shutdown_requested = True
+    
+    def _attempt_recovery(self):
+        """Attempt to recover from system hang."""
+        logger.info("Attempting system recovery...")
+        
+        try:
+            # Force garbage collection
+            import gc
+            gc.collect()
+            
+            # Reset camera connection
+            if self.camera_manager:
+                logger.info("Resetting camera connection...")
+                self.camera_manager.release()
+                time.sleep(2)
+                self.camera_manager.initialize_camera()
+            
+            # Clear any stuck web frames
+            with self.web_lock:
+                self.web_frame = None
+                
+            logger.info("Recovery attempt completed")
+            
+        except Exception as e:
+            logger.error(f"Recovery failed: {e}")
     
     def _cleanup(self):
         """Clean up resources on shutdown - simplified like web_preview.py."""

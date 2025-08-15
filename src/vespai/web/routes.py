@@ -113,20 +113,33 @@ def register_routes(app, stats, hourly_detections, app_instance):
             Yields:
                 bytes: MJPEG frame data with HTTP multipart boundaries
             """
+            frame_timeout = 0
             while True:
-                with app_instance.web_lock:
-                    if app_instance.web_frame is None:
+                try:
+                    with app_instance.web_lock:
+                        if app_instance.web_frame is None:
+                            frame_timeout += 1
+                            if frame_timeout > 100:  # 10 seconds without frame
+                                logger.warning("No frames available for streaming")
+                                frame_timeout = 0
+                            time.sleep(0.1)
+                            continue
+                        frame = app_instance.web_frame.copy()
+                        frame_timeout = 0
+
+                    # Optimized quality for Raspberry Pi performance
+                    (flag, encodedImage) = cv2.imencode(".jpg", frame,
+                                                        [cv2.IMWRITE_JPEG_QUALITY, 60])
+                    if not flag:
                         continue
-                    frame = app_instance.web_frame.copy()
 
-                # Optimized quality for Raspberry Pi performance
-                (flag, encodedImage) = cv2.imencode(".jpg", frame,
-                                                    [cv2.IMWRITE_JPEG_QUALITY, 60])
-                if not flag:
+                    yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
+                           bytearray(encodedImage) + b'\r\n')
+                           
+                except Exception as e:
+                    logger.error(f"Video feed error: {e}")
+                    time.sleep(0.5)
                     continue
-
-                yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
-                       bytearray(encodedImage) + b'\r\n')
 
         return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -293,6 +306,20 @@ def register_routes(app, stats, hourly_detections, app_instance):
 
         # Convert any numpy arrays to JSON-serializable types
         response_data = convert_numpy_to_serializable(response_data)
+        
+        # Add health check information
+        current_time = time.time()
+        if 'last_update' in stats:
+            response_data['system_health'] = {
+                'last_update': current_time,
+                'time_since_last_frame': current_time - stats.get('last_update', current_time),
+                'status': 'healthy' if current_time - stats.get('last_update', current_time) < 30 else 'warning'
+            }
+        else:
+            response_data['system_health'] = {
+                'last_update': current_time,
+                'status': 'unknown'
+            }
         
         # Debug log frame_id periodically
         if hasattr(stats, 'get') and stats.get('frame_id', 0) % 50 == 0:
