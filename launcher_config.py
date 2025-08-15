@@ -56,6 +56,9 @@ def get_command(venv_python, repo_dir):
 
         if CONFIG.get('debug_mode'):
             cmd += " --print"
+            
+        if CONFIG.get('enable_sms'):
+            cmd += " --sms"
 
     elif MODE == 'modular':
         # Run the modular version (adjust path as needed)
