@@ -305,11 +305,37 @@ body::before {
     left: 0;
     right: 0;
     height: 3px;
+    background: linear-gradient(90deg, var(--success) 0%, var(--info) 100%);
+}
+
+/* Frames Processed - Green/Teal */
+.stat-card:nth-child(1)::before {
+    background: linear-gradient(90deg, var(--success) 0%, var(--info) 100%);
+}
+
+/* Vespa Velutina - Red/Orange */
+.stat-card:nth-child(2)::before {
+    background: linear-gradient(90deg, var(--danger) 0%, var(--primary) 100%);
+}
+
+/* Vespa Crabro - Orange/Yellow */
+.stat-card:nth-child(3)::before {
     background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
 }
 
-.stat-card.danger::before {
-    background: linear-gradient(90deg, var(--danger) 0%, var(--warning) 100%);
+/* Total Detections - Green/Teal */
+.stat-card:nth-child(4)::before {
+    background: linear-gradient(90deg, var(--success) 0%, var(--info) 100%);
+}
+
+/* SMS Alerts - Red/Pink */
+.stat-card:nth-child(5)::before {
+    background: linear-gradient(90deg, var(--danger) 0%, #ff0080 100%);
+}
+
+/* SMS Costs - Orange/Yellow */
+.stat-card:nth-child(6)::before {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
 }
 
 .stat-value {
@@ -724,12 +750,12 @@ body::before {
     }
     .stat-label {
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 400;
         text-transform: uppercase;
         letter-spacing: 0.3px;
         margin-bottom: 0.25rem;
-        color: #ff6600;
-        opacity: 1;
+        color: var(--text-dim);
+        opacity: 0.8;
         min-height: 2rem;
         max-height: 2rem;
         overflow: hidden;
@@ -740,9 +766,9 @@ body::before {
     .stat-detail {
         font-size: 0.7rem;
         margin-top: 0.25rem;
-        color: #cccccc;
-        font-weight: 500;
-        opacity: 1;
+        color: var(--text-dim);
+        font-weight: 400;
+        opacity: 0.8;
     }
     .video-container {
         margin-bottom: 1rem;
