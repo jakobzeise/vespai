@@ -428,33 +428,57 @@ HTML_TEMPLATE = '''
                 padding: 0 0.5rem;
                 margin: 1rem auto;
             }
-            /* Show 6 stat cards on mobile in 2x3 grid */
+            /* Mobile stat cards - more like desktop */
             .stats-grid {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: 0.5rem;
-                margin-bottom: 1rem;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
             }
             .stat-card {
-                padding: 1rem;
-                aspect-ratio: 1;
+                background: rgba(20, 20, 20, 0.9);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                padding: 1.2rem;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 text-align: center;
-                border-radius: 20px;
-                box-shadow: 0 4px 15px rgba(255, 102, 0, 0.15);
-                transition: all 0.3s ease;
+                min-height: 120px;
+            }
+            .stat-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
+            }
+            .stat-card::after {
+                content: '';
+                position: absolute;
+                top: -15px;
+                right: -15px;
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(45deg, transparent 30%, var(--honey) 30%, var(--honey) 70%, transparent 70%);
+                opacity: 0.05;
+                transform: rotate(30deg);
             }
             .stat-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(255, 102, 0, 0.25);
+                transform: translateY(-3px);
+                box-shadow: 0 15px 30px rgba(255,102,0,0.2);
             }
             .stat-value {
                 font-size: 1.8rem;
-                font-weight: 800;
-                margin-bottom: 0.25rem;
+                font-weight: 700;
+                margin-bottom: 0.3rem;
                 line-height: 1;
                 color: #ffffff;
                 text-shadow: 0 2px 8px rgba(255, 102, 0, 0.3);
@@ -465,15 +489,15 @@ HTML_TEMPLATE = '''
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
                 margin-bottom: 0.25rem;
-                color: #ff6600;
-                opacity: 1;
+                color: var(--text-dim);
+                opacity: 0.9;
             }
             .stat-detail {
                 font-size: 0.7rem;
+                color: var(--text-dim);
+                opacity: 0.8;
                 margin-top: 0.25rem;
-                color: #cccccc;
                 font-weight: 500;
-                opacity: 1;
             }
             .chart-card {
                 overflow: visible;
