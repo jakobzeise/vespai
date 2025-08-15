@@ -16,7 +16,7 @@ CONFIG = {
     'enable_motion': True,
     'enable_sms': True,
     'resolution': '720p',
-    'confidence': 0.7,
+    'confidence': 0.8,
     'save_detections': True,
     'debug_mode': False,
 }
@@ -59,7 +59,7 @@ def get_command(venv_python, repo_dir):
 
     elif MODE == 'modular':
         # Run the modular version (adjust path as needed)
-        cmd = f"{venv_python} {repo_dir}/src/vespai/main.py"
+        cmd = f"{venv_python} {repo_dir}/src/vespai/web_preview.py"
 
         # Add modular-specific configuration
         if CONFIG.get('enable_web'):
