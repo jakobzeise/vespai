@@ -889,6 +889,12 @@ HTML_TEMPLATE = '''
                 <div class="stat-detail" id="uptime">Uptime: 0h 0m</div>
             </div>
 
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--success);" id="total-detections">0</div>
+                <div class="stat-label">Total Detections</div>
+                <div class="stat-detail" id="detection-rate">0/h</div>
+            </div>
+
             <div class="stat-card danger">
                 <div class="stat-value" style="color: var(--danger);" id="velutina-count">0</div>
                 <div class="stat-label">Vespa Velutina</div>
@@ -899,12 +905,6 @@ HTML_TEMPLATE = '''
                 <div class="stat-value" style="color: var(--warning);" id="crabro-count">0</div>
                 <div class="stat-label">Vespa Crabro</div>
                 <div class="stat-detail" id="crabro-last">-</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-value" style="color: var(--success);" id="total-detections">0</div>
-                <div class="stat-label">Total Detections</div>
-                <div class="stat-detail" id="detection-rate">0/h</div>
             </div>
 
             <div class="stat-card">
