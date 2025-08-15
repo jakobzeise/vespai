@@ -1690,8 +1690,8 @@ def main():
     if hasattr(args, 'sms') and args.sms:
         os.environ["ENABLE_SMS"] = "true"
     elif hasattr(args, 'sms'):
-        # If --sms flag exists but not set, respect existing ENABLE_SMS env var
-        pass
+        # If --sms flag exists but not set, disable SMS by default (like modular version)
+        os.environ["ENABLE_SMS"] = "false"
 
     # Parse resolution
     resolution_map = {"4k": (3840, 2160), "1080p": (1920, 1080),
