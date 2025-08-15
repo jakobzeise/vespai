@@ -158,9 +158,9 @@ class VespAIApplication:
         )
         self.web_thread.start()
         
-        # Give web server time to start
-        time.sleep(2)
-        logger.info("Web interface available at %s", web_config['public_url'])
+        # Quick web server startup check
+        time.sleep(0.5)
+        logger.info("Web interface starting at %s", web_config['public_url'])
     
     def _run_web_server(self, host: str, port: int):
         """Run Flask web server (called in background thread) - simplified like web_preview.py."""

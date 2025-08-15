@@ -63,8 +63,13 @@ class CameraManager:
             RuntimeError: If no camera can be opened
         """
         if video_file:
+            import os
+            if not os.path.exists(video_file):
+                raise RuntimeError(f"Video file not found: {video_file}")
             logger.info("Opening video file: %s", video_file)
             self.cap = cv2.VideoCapture(video_file)
+            if not self.cap.isOpened():
+                raise RuntimeError(f"Failed to open video file: {video_file}")
         else:
             logger.info("Initializing camera with resolution %dx%d", self.width, self.height)
             
@@ -101,7 +106,8 @@ class CameraManager:
             raise RuntimeError("Failed to initialize video capture")
             
         logger.info("Camera initialized successfully")
-        time.sleep(2)  # Allow camera to stabilize
+        # Reduced stabilization time for better performance
+        time.sleep(0.5)  # Quick stabilization
         return self.cap
     
     def _configure_camera(self):
