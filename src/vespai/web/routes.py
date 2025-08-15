@@ -89,6 +89,11 @@ def register_routes(app, stats, hourly_detections, app_instance):
         response.headers['Cache-Control'] = 'public, max-age=300'  # 5 minute cache
         return response
 
+    @app.route('/favicon.ico')
+    def favicon():
+        """Serve favicon to prevent 404 errors."""
+        return app.send_static_file('img/favicon.svg')
+
     @app.route('/video_feed')
     def video_feed():
         """
