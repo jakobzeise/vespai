@@ -908,13 +908,13 @@ HTML_TEMPLATE = '''
             </div>
 
             <div class="stat-card">
-                <div class="stat-value" id="sms-count">0</div>
+                <div class="stat-value" style="color: #ff6600 !important;" id="sms-count">0</div>
                 <div class="stat-label">SMS Alerts</div>
                 <div class="stat-detail" id="last-sms">-</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-value" id="sms-cost">0.00€</div>
+                <div class="stat-value" style="color: #ff6600 !important;" id="sms-cost">0.00€</div>
                 <div class="stat-label">SMS Costs</div>
                 <div class="stat-detail" id="cost-per-sms">-</div>
             </div>
