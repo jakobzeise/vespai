@@ -308,32 +308,32 @@ body::before {
     background: linear-gradient(90deg, var(--success) 0%, var(--info) 100%);
 }
 
-/* Frames Processed - Green/Teal */
+/* 1. Frames Processed - Green/Teal */
 .stat-card:nth-child(1)::before {
     background: linear-gradient(90deg, var(--success) 0%, var(--info) 100%);
 }
 
-/* Vespa Velutina - Red/Pink (same as SMS Alerts) */
+/* 2. Total Detections - Green/Teal */
 .stat-card:nth-child(2)::before {
-    background: linear-gradient(90deg, var(--danger) 0%, #ff0080 100%);
-}
-
-/* Vespa Crabro - Orange/Yellow */
-.stat-card:nth-child(3)::before {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
-}
-
-/* Total Detections - Green/Teal */
-.stat-card:nth-child(4)::before {
     background: linear-gradient(90deg, var(--success) 0%, var(--info) 100%);
 }
 
-/* SMS Alerts - Red/Pink */
-.stat-card:nth-child(5)::before {
+/* 3. Vespa Velutina - Red/Pink */
+.stat-card:nth-child(3)::before {
     background: linear-gradient(90deg, var(--danger) 0%, #ff0080 100%);
 }
 
-/* SMS Costs - Orange/Yellow */
+/* 4. Vespa Crabro - Red/Pink */
+.stat-card:nth-child(4)::before {
+    background: linear-gradient(90deg, var(--danger) 0%, #ff0080 100%);
+}
+
+/* 5. SMS Alerts - Orange/Yellow */
+.stat-card:nth-child(5)::before {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
+}
+
+/* 6. SMS Costs - Orange/Yellow */
 .stat-card:nth-child(6)::before {
     background: linear-gradient(90deg, var(--primary) 0%, var(--warning) 100%);
 }
