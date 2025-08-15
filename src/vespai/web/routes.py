@@ -291,6 +291,10 @@ def register_routes(app, stats, hourly_detections, app_instance):
         # Convert any numpy arrays to JSON-serializable types
         response_data = convert_numpy_to_serializable(response_data)
         
+        # Debug log frame_id periodically
+        if hasattr(stats, 'get') and stats.get('frame_id', 0) % 50 == 0:
+            print(f"DEBUG: API returning frame_id: {response_data.get('frame_id', 'NOT_FOUND')}")
+        
         return jsonify(response_data)
 
 
