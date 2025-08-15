@@ -149,12 +149,12 @@ class VespAIApplication:
             self
         )
         
-        # Start web server in background thread
+        # Start web server in background thread (matching web_preview.py approach)
         web_config = self.config.get_web_config()
         self.web_thread = threading.Thread(
             target=self._run_web_server,
             args=(web_config['host'], web_config['port']),
-            daemon=False  # Don't use daemon thread for proper shutdown
+            daemon=True  # Use daemon thread like original - auto-dies on main exit
         )
         self.web_thread.start()
         
@@ -163,9 +163,10 @@ class VespAIApplication:
         logger.info("Web interface available at %s", web_config['public_url'])
     
     def _run_web_server(self, host: str, port: int):
-        """Run Flask web server (called in background thread)."""
+        """Run Flask web server (called in background thread) - simplified like web_preview.py."""
         try:
-            self.flask_app.run(host=host, port=port, debug=False, use_reloader=False, threaded=True)
+            # Match web_preview.py parameters exactly
+            self.flask_app.run(host=host, port=port, threaded=True, debug=False)
         except Exception as e:
             logger.error("Web server error: %s", e)
     
@@ -251,16 +252,8 @@ class VespAIApplication:
             self.running = False
             return False
         finally:
-            # Quick cleanup with timeout
-            try:
-                import signal
-                signal.alarm(5)  # 5 second timeout for cleanup
-                self._cleanup()
-                signal.alarm(0)  # Cancel alarm
-            except:
-                logger.warning("Cleanup timeout, forcing exit...")
-                import os
-                os._exit(0)
+            # Simple cleanup like web_preview.py
+            self._cleanup()
         
         logger.info("VespAI detection system stopped")
         return True
@@ -357,27 +350,10 @@ class VespAIApplication:
         self._shutdown_requested = True
     
     def _cleanup(self):
-        """Clean up resources on shutdown."""
+        """Clean up resources on shutdown - simplified like web_preview.py."""
         logger.info("Cleaning up resources...")
         
-        # Stop Flask web server
-        if hasattr(self, 'web_thread') and self.web_thread and self.web_thread.is_alive():
-            logger.info("Shutting down web server...")
-            try:
-                # Try graceful shutdown first
-                import requests
-                requests.post(f'http://localhost:{self.config.get_web_config()["port"]}/shutdown', timeout=1)
-                # Wait for thread to finish (shorter timeout)
-                self.web_thread.join(timeout=2)
-            except Exception as e:
-                logger.debug("Web server shutdown: %s", e)
-            
-            # Force termination if still alive
-            if self.web_thread.is_alive():
-                logger.warning("Web server not responding, forcing shutdown...")
-                import os
-                os._exit(0)
-        
+        # Release camera (web server will auto-die as daemon thread)
         if self.camera_manager:
             self.camera_manager.release()
         

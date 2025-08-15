@@ -94,15 +94,6 @@ def register_routes(app, stats, hourly_detections, app_instance):
         """Serve favicon to prevent 404 errors."""
         return app.send_static_file('img/favicon.svg')
 
-    @app.route('/shutdown', methods=['POST'])
-    def shutdown():
-        """Shutdown the Flask server gracefully."""
-        func = request.environ.get('werkzeug.server.shutdown')
-        if func is None:
-            return 'Not running with the Werkzeug Server', 500
-        func()
-        return 'Server shutting down...', 200
-
     @app.route('/video_feed')
     def video_feed():
         """
