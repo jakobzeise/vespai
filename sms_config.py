@@ -21,7 +21,7 @@ SMS_CONFIG = {
     "enabled": True,
     
     # Domain name for SMS links (for viewing detection images)
-    "domain_name": "localhost",
+    "domain_name": "vespai.eu",
     
     # Override SMS cost (in EUR) - if None, use cost from API response
     # Set to 0.08 to force 8 cent cost instead of API response
