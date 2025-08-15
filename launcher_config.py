@@ -6,6 +6,7 @@ This file is part of the repository and controls what gets executed
 
 import os
 from datetime import datetime
+from sms_config import SMS_CONFIG, get_phone_number, get_sender_name, get_delay_minutes, get_domain_name
 
 # Configuration mode: 'monolith' or 'modular'
 MODE = 'monolith'
@@ -87,11 +88,25 @@ def setup_environment():
     """
     Set up any environment variables or system settings needed
     """
-    # Example: Set environment variables
+    # Set up basic environment
     os.environ['PYTHONUNBUFFERED'] = '1'
-
-    # Example: Location-specific settings
-    # if in Switzerland:
-    #     os.environ['TZ'] = 'Europe/Zurich'
+    
+    # Set up SMS configuration from sms_config.py
+    phone_number = get_phone_number()
+    if phone_number:
+        os.environ['PHONE_NUMBER'] = phone_number
+        print(f"✓ Phone number configured: {phone_number}")
+    else:
+        print("⚠️  No phone number configured in sms_config.py")
+    
+    os.environ['LOX24_SENDER'] = get_sender_name()
+    os.environ['SMS_DELAY_MINUTES'] = str(get_delay_minutes())
+    os.environ['DOMAIN_NAME'] = get_domain_name()
+    
+    # Enable SMS if configured in CONFIG
+    if CONFIG.get('enable_sms') and phone_number:
+        os.environ['ENABLE_SMS'] = 'true'
+    else:
+        os.environ['ENABLE_SMS'] = 'false'
 
     return True
