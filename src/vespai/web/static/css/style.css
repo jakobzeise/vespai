@@ -237,6 +237,21 @@ body::before {
     gap: 0.5rem;
 }
 
+/* Fixed width for time displays to prevent resizing */
+#current-time {
+    font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+    font-weight: 500;
+    min-width: 5.5rem;
+    text-align: left;
+}
+
+#uptime, #uptime-sys {
+    font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+    font-weight: 500;
+    min-width: 4rem;
+    text-align: left;
+}
+
 .live-indicator {
     width: 10px;
     height: 10px;
