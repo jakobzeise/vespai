@@ -361,10 +361,13 @@ body::before {
     text-align: center;
 }
 
+/* Consistent subtitle styling for all stat boxes */
 .stat-label {
     color: var(--text-dim);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 400;
     text-transform: uppercase;
+    letter-spacing: 0.3px;
     min-height: 2.5rem;
     max-height: 2.5rem;
     display: flex;
@@ -380,6 +383,7 @@ body::before {
 
 .stat-detail {
     font-size: 0.85rem;
+    font-weight: 400;
     color: var(--text-dim);
     margin-top: 0.5rem;
     min-height: 1.5rem;
@@ -645,8 +649,12 @@ body::before {
 
 .system-label {
     font-size: 0.85rem;
+    font-weight: 400;
     color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
     margin-top: 0.25rem;
+    text-align: center;
 }
 
 /* Scrollbar */
