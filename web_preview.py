@@ -884,7 +884,7 @@ HTML_TEMPLATE = '''
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value" id="frame-count">0</div>
+                <div class="stat-value" style="color: var(--success);" id="frame-count">0</div>
                 <div class="stat-label">Frames Processed</div>
                 <div class="stat-detail" id="uptime">Uptime: 0h 0m</div>
             </div>
@@ -901,7 +901,7 @@ HTML_TEMPLATE = '''
                 <div class="stat-detail" id="velutina-last">-</div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card warning">
                 <div class="stat-value" style="color: var(--warning);" id="crabro-count">0</div>
                 <div class="stat-label">Vespa Crabro</div>
                 <div class="stat-detail" id="crabro-last">-</div>
