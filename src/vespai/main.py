@@ -154,7 +154,7 @@ class VespAIApplication:
         self.web_thread = threading.Thread(
             target=self._run_web_server,
             args=(web_config['host'], web_config['port']),
-            daemon=True
+            daemon=False  # Don't use daemon thread for proper shutdown
         )
         self.web_thread.start()
         
@@ -341,6 +341,20 @@ class VespAIApplication:
     def _cleanup(self):
         """Clean up resources on shutdown."""
         logger.info("Cleaning up resources...")
+        
+        # Stop Flask web server
+        if hasattr(self, 'web_thread') and self.web_thread and self.web_thread.is_alive():
+            logger.info("Shutting down web server...")
+            try:
+                # Try graceful shutdown first
+                import requests
+                requests.post(f'http://localhost:{self.config.get_web_config()["port"]}/shutdown', timeout=2)
+                # Wait for thread to finish
+                self.web_thread.join(timeout=5)
+            except Exception as e:
+                logger.debug("Web server shutdown: %s", e)
+                # Force thread termination if graceful shutdown fails
+                pass
         
         if self.camera_manager:
             self.camera_manager.release()
