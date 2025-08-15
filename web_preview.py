@@ -1683,7 +1683,15 @@ def main():
     argp.add_argument("-v", "--video")
     argp.add_argument("-r", "--resolution", default="1920x1080")
     argp.add_argument("--web", action="store_true", help="Enable web server")
+    argp.add_argument("--sms", action="store_true", help="Enable SMS alerts (requires LOX24_API_KEY and PHONE_NUMBER)")
     args = argp.parse_args()
+
+    # Handle SMS option - override environment variable if --sms is provided
+    if hasattr(args, 'sms') and args.sms:
+        os.environ["ENABLE_SMS"] = "true"
+    elif hasattr(args, 'sms'):
+        # If --sms flag exists but not set, respect existing ENABLE_SMS env var
+        pass
 
     # Parse resolution
     resolution_map = {"4k": (3840, 2160), "1080p": (1920, 1080),
