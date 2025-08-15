@@ -26,8 +26,8 @@
         }
         
         .frame-container {
-            max-width: 90vw;
-            max-height: 70vh;
+            max-width: 95vw;
+            width: fit-content;
             border: 2px solid #444;
             border-radius: 10px;
             overflow: hidden;
@@ -35,16 +35,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: #333;
         }
         
         .frame-image {
-            max-width: 100%;
-            max-height: 100%;
+            max-width: 95vw;
+            max-height: 85vh;
             width: auto;
             height: auto;
             display: block;
-            background: #333;
             object-fit: contain;
+            background: #333;
         }
         
         .loading {
@@ -97,9 +98,16 @@
             }
             
             .frame-container {
-                max-width: 95vw;
-                max-height: 60vh;
-                min-height: 250px;
+                max-width: 98vw;
+                width: fit-content;
+                margin: 0 auto;
+            }
+            
+            .frame-image {
+                max-width: 98vw;
+                max-height: 70vh;
+                width: auto;
+                height: auto;
             }
             
             .actions {
