@@ -193,13 +193,16 @@ class ModelManager:
         
         for method in loading_methods:
             try:
+                logger.info("Trying model loading method: %s", method.__name__)
                 self.model = method()
                 if self.model is not None:
                     self._configure_model()
-                    logger.info("Model loaded successfully via %s", method.__name__)
+                    logger.info("✓ Model loaded successfully via %s", method.__name__)
                     return self.model
+                else:
+                    logger.warning("✗ Method %s returned None", method.__name__)
             except Exception as e:
-                logger.debug("Loading method %s failed: %s", method.__name__, e)
+                logger.warning("✗ Loading method %s failed: %s", method.__name__, e)
                 continue
         
         raise RuntimeError("Failed to load model with any method")
