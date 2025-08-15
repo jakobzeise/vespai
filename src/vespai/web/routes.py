@@ -28,10 +28,14 @@ Version: 1.0
 import cv2
 import psutil
 import datetime
+import logging
 from flask import Response, render_template, jsonify
 import os
 import numpy as np
 import time
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 
 def convert_numpy_to_serializable(data):
