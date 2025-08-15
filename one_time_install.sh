@@ -8,7 +8,7 @@ echo "======================================"
 echo ""
 
 # Make sure we're in the right directory
-cd /home/vespai/vespai
+cd /home/vespai
 
 # Make scripts executable
 chmod +x smart_start.sh
@@ -51,6 +51,6 @@ else
     echo ""
 fi
 
-echo "Installation log saved to: /home/vespai/vespai/install.log"
-date >> /home/vespai/vespai/install.log
-echo "Installation completed" >> /home/vespai/vespai/install.log
+echo "Installation log saved to: /home/vespai/install.log"
+date >> /home/vespai/install.log
+echo "Installation completed" >> /home/vespai/install.log

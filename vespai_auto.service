@@ -7,13 +7,13 @@ Wants=network-online.target
 Type=simple
 User=vespai
 Group=vespai
-WorkingDirectory=/home/vespai/vespai
+WorkingDirectory=/home/vespai
 ExecStartPre=/bin/sleep 30
-ExecStart=/home/vespai/vespai/smart_start.sh
+ExecStart=/home/vespai/smart_start.sh
 Restart=always
 RestartSec=30
-StandardOutput=append:/home/vespai/vespai/vespai.log
-StandardError=append:/home/vespai/vespai/vespai_error.log
+StandardOutput=append:/home/vespai/vespai.log
+StandardError=append:/home/vespai/vespai_error.log
 
 [Install]
 WantedBy=multi-user.target

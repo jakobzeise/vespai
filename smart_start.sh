@@ -2,13 +2,13 @@
 # Author: Jakob Zeise (Zeise Digital)
 # Smart startup script that reads config from git and adapts
 
-LOG_FILE="/home/vespai/vespai/startup.log"
-CONFIG_FILE="/home/vespai/vespai/remote_config.json"
+LOG_FILE="/home/vespai/startup.log"
+CONFIG_FILE="/home/vespai/remote_config.json"
 
 echo "$(date): Starting VespAI Smart Launcher" >> $LOG_FILE
 
 # Navigate to VespAI directory
-cd /home/vespai/vespai
+cd /home/vespai
 
 # Always pull latest changes from git on reboot
 echo "$(date): Pulling latest changes from git..." >> $LOG_FILE
@@ -41,7 +41,7 @@ if [ "$ENABLED" != "true" ]; then
 fi
 
 # Activate virtual environment
-source /home/vespai/vespai/venv/bin/activate
+source /home/vespai/venv/bin/activate
 
 # Update dependencies if requirements changed
 pip install -r requirements.txt --quiet >> $LOG_FILE 2>&1
