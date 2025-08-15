@@ -245,11 +245,22 @@ class VespAIApplication:
         
         except KeyboardInterrupt:
             logger.info("Received interrupt signal")
+            self.running = False
         except Exception as e:
             logger.error("Unexpected error in detection loop: %s", e)
+            self.running = False
             return False
         finally:
-            self._cleanup()
+            # Quick cleanup with timeout
+            try:
+                import signal
+                signal.alarm(5)  # 5 second timeout for cleanup
+                self._cleanup()
+                signal.alarm(0)  # Cancel alarm
+            except:
+                logger.warning("Cleanup timeout, forcing exit...")
+                import os
+                os._exit(0)
         
         logger.info("VespAI detection system stopped")
         return True
@@ -337,6 +348,13 @@ class VespAIApplication:
         """Handle shutdown signals gracefully."""
         logger.info("Received signal %d, shutting down...", signum)
         self.running = False
+        
+        # Force immediate shutdown on second Ctrl+C
+        if hasattr(self, '_shutdown_requested'):
+            logger.info("Force shutdown requested, terminating immediately...")
+            import os
+            os._exit(0)
+        self._shutdown_requested = True
     
     def _cleanup(self):
         """Clean up resources on shutdown."""
@@ -348,13 +366,17 @@ class VespAIApplication:
             try:
                 # Try graceful shutdown first
                 import requests
-                requests.post(f'http://localhost:{self.config.get_web_config()["port"]}/shutdown', timeout=2)
-                # Wait for thread to finish
-                self.web_thread.join(timeout=5)
+                requests.post(f'http://localhost:{self.config.get_web_config()["port"]}/shutdown', timeout=1)
+                # Wait for thread to finish (shorter timeout)
+                self.web_thread.join(timeout=2)
             except Exception as e:
                 logger.debug("Web server shutdown: %s", e)
-                # Force thread termination if graceful shutdown fails
-                pass
+            
+            # Force termination if still alive
+            if self.web_thread.is_alive():
+                logger.warning("Web server not responding, forcing shutdown...")
+                import os
+                os._exit(0)
         
         if self.camera_manager:
             self.camera_manager.release()
