@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16" width="24" height="16">
+  <!-- Fallback US Flag - Author: Jakob Zeise (Zeise Digital) -->
+  <rect width="24" height="16" fill="#002868"/>
+  <rect y="0" width="24" height="1.2" fill="#BF0A30"/>
+  <rect y="2.4" width="24" height="1.2" fill="#BF0A30"/>
+  <rect y="4.8" width="24" height="1.2" fill="#BF0A30"/>
+  <rect y="7.2" width="24" height="1.2" fill="#BF0A30"/>
+  <rect y="9.6" width="24" height="1.2" fill="#BF0A30"/>
+  <rect y="12" width="24" height="1.2" fill="#BF0A30"/>
+  <rect y="14.4" width="24" height="1.6" fill="#BF0A30"/>
+  <rect width="10" height="8" fill="#002868"/>
+  <text x="5" y="5" fill="white" font-size="3" text-anchor="middle">EN</text>
+</svg>

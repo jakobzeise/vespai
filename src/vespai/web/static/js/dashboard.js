@@ -38,7 +38,7 @@ const translations = {
         'total-detections': 'Gesamt Erkennungen',
         'vespa-velutina': 'Vespa Velutina',
         'vespa-crabro': 'Vespa Crabro',
-        'sms-alerts': 'SMS Benachrichtigungen',
+        'sms-alerts': 'SMS Warnungen',
         'sms-costs': 'SMS Kosten',
         'live-detection-feed': 'Live Erkennungs-Feed',
         'fullscreen': 'Vollbild',

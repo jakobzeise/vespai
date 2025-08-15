@@ -27,11 +27,13 @@
             <div class="status-bar">
                 <div class="language-selector">
                     <button class="lang-btn active" data-lang="en" title="English">
-                        <img src="/static/img/united_states.png" alt="US Flag" class="flag-img">
+                        <img src="/static/img/united_states.png" alt="US Flag" class="flag-img" 
+                             onerror="this.src='/static/img/fallback-en.svg'">
                         <span class="lang-text">EN</span>
                     </button>
                     <button class="lang-btn" data-lang="de" title="Deutsch">
-                        <img src="/static/img/germany.png" alt="German Flag" class="flag-img">
+                        <img src="/static/img/germany.png" alt="German Flag" class="flag-img"
+                             onerror="this.src='/static/img/fallback-de.svg'">
                         <span class="lang-text">DE</span>
                     </button>
                 </div>
