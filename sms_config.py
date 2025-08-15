@@ -21,7 +21,11 @@ SMS_CONFIG = {
     "enabled": True,
     
     # Domain name for SMS links (for viewing detection images)
-    "domain_name": "localhost"
+    "domain_name": "localhost",
+    
+    # Override SMS cost (in EUR) - if None, use cost from API response
+    # Set to 0.08 to force 8 cent cost instead of API response
+    "cost_override": None  # or 0.08 to force 8 cents
 }
 
 def get_phone_number():
@@ -43,3 +47,7 @@ def is_sms_enabled():
 def get_domain_name():
     """Get the configured domain name"""
     return SMS_CONFIG.get("domain_name", "localhost")
+
+def get_cost_override():
+    """Get the cost override value (None to use API response)"""
+    return SMS_CONFIG.get("cost_override", None)

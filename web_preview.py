@@ -1582,6 +1582,16 @@ class Lox24SMS:
                 elif 'total_price' in response_data:
                     cost = float(response_data['total_price'])
                 
+                # Check for cost override from config
+                try:
+                    from sms_config import get_cost_override
+                    cost_override = get_cost_override()
+                    if cost_override is not None:
+                        cost = float(cost_override)
+                        print(f"  Using cost override: {cost:.3f}€ (API returned: {response_data.get('price', 'N/A')})")
+                except ImportError:
+                    pass  # sms_config not available, use API cost
+                
                 return True, cost
 
         except requests.exceptions.RequestException as e:
