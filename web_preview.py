@@ -131,6 +131,26 @@ HTML_TEMPLATE = '''
             box-sizing: border-box;
         }
 
+        /* Hide default cursor - only on desktop/mouse devices */
+        @media (pointer: fine) and (min-width: 641px) {
+            body {
+                cursor: none !important;
+            }
+            
+            body * {
+                cursor: inherit !important;
+            }
+        }
+
+        /* Show normal cursor on mobile/touch devices */
+        @media (pointer: coarse), (max-width: 640px) {
+            body, body * {
+                cursor: auto !important;
+            }
+        }
+
+        /* Custom cursor styles handled by JavaScript */
+
         :root {
             --primary: #ff6600;
             --danger: #ff0040;
@@ -973,6 +993,80 @@ HTML_TEMPLATE = '''
     </div>
 
     <script>
+        // Custom orange neon cursor
+        let cursor = null;
+
+        // Initialize custom cursor (only on desktop)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if this is a mobile/touch device
+            const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 640;
+            
+            if (isMobile) {
+                console.log('VespAI Dashboard: Mobile device detected, skipping custom cursor');
+                return;
+            }
+            
+            console.log('VespAI Dashboard: Initializing custom orange neon cursor...');
+            
+            try {
+                // Create cursor element
+                cursor = document.createElement('div');
+                // Set individual properties for better browser compatibility
+                cursor.style.position = 'fixed';
+                cursor.style.width = '16px';
+                cursor.style.height = '16px';
+                cursor.style.backgroundColor = '#ff6600';
+                cursor.style.border = '2px solid #ffffff';
+                cursor.style.borderRadius = '50%';
+                cursor.style.pointerEvents = 'none';
+                cursor.style.zIndex = '99999';
+                cursor.style.boxShadow = '0 0 15px #ff6600, 0 0 25px #ff6600';
+                cursor.style.transform = 'translate(-50%, -50%)';
+                cursor.style.opacity = '1';
+                document.body.appendChild(cursor);
+                console.log('VespAI Dashboard: Custom cursor created and added to page!');
+            } catch (error) {
+                console.error('VespAI Dashboard: Failed to create cursor:', error);
+                // Fallback: just disable default cursor
+                document.body.style.cursor = 'none';
+            }
+            
+            // Animate the glow (simplified for better performance)
+            setInterval(() => {
+                try {
+                    if (cursor && cursor.style) {
+                        const intensity = Math.sin(Date.now() * 0.003) * 0.3 + 0.7;
+                        const glowSize = Math.round(10 + intensity * 10);
+                        cursor.style.boxShadow = `0 0 ${glowSize}px #ff6600, 0 0 ${glowSize * 2}px rgba(255, 102, 0, 0.6)`;
+                    }
+                } catch (error) {
+                    console.error('VespAI Dashboard: Animation error:', error);
+                }
+            }, 100);
+        });
+
+        // Track mouse movement
+        document.addEventListener('mousemove', function(e) {
+            try {
+                if (cursor && cursor.style) {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                }
+            } catch (error) {
+                console.error('VespAI Dashboard: Mouse tracking error:', error);
+            }
+        });
+
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', function() {
+            if (cursor) cursor.style.opacity = '0';
+        });
+
+        // Show cursor when entering window
+        document.addEventListener('mouseenter', function() {
+            if (cursor) cursor.style.opacity = '1';
+        });
+
         // Track log entries to prevent duplicates
         let logMap = new Map();
         let lastChartUpdate = 0;
