@@ -996,20 +996,19 @@ HTML_TEMPLATE = '''
         // Custom orange neon cursor
         let cursor = null;
 
-        // Initialize custom cursor (only on desktop)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if this is a mobile/touch device
-            const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 640;
-            
-            if (isMobile) {
-                console.log('VespAI Dashboard: Mobile device detected, skipping custom cursor');
-                return;
-            }
-            
-            console.log('VespAI Dashboard: Initializing custom orange neon cursor...');
+        // Initialize custom cursor immediately
+        console.log('VespAI Dashboard: Starting cursor initialization...');
+        
+        // Check if this is a mobile/touch device
+        const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 640;
+        
+        console.log('VespAI Dashboard: Device check - isMobile:', isMobile, 'width:', window.innerWidth);
+        
+        if (!isMobile) {
+            console.log('VespAI Dashboard: Creating custom orange neon cursor...');
             
             try {
-                // Create cursor element
+                // Create cursor element immediately
                 cursor = document.createElement('div');
                 // Set individual properties for better browser compatibility
                 cursor.style.position = 'fixed';
@@ -1023,12 +1022,20 @@ HTML_TEMPLATE = '''
                 cursor.style.boxShadow = '0 0 15px #ff6600, 0 0 25px #ff6600';
                 cursor.style.transform = 'translate(-50%, -50%)';
                 cursor.style.opacity = '1';
-                document.body.appendChild(cursor);
-                console.log('VespAI Dashboard: Custom cursor created and added to page!');
+                
+                // Add to body when DOM is ready
+                function addCursorToBody() {
+                    if (document.body) {
+                        document.body.appendChild(cursor);
+                        console.log('VespAI Dashboard: Custom cursor added to page!');
+                    } else {
+                        setTimeout(addCursorToBody, 10);
+                    }
+                }
+                addCursorToBody();
+                
             } catch (error) {
                 console.error('VespAI Dashboard: Failed to create cursor:', error);
-                // Fallback: just disable default cursor
-                document.body.style.cursor = 'none';
             }
             
             // Animate the glow (simplified for better performance)
@@ -1043,7 +1050,7 @@ HTML_TEMPLATE = '''
                     console.error('VespAI Dashboard: Animation error:', error);
                 }
             }, 100);
-        });
+        }
 
         // Track mouse movement
         document.addEventListener('mousemove', function(e) {
