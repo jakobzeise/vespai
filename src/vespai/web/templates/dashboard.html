@@ -9,7 +9,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/style.css?v=2025081404">
+    <link rel="stylesheet" href="/static/css/style.css?t={{ timestamp }}">
 </head>
 <body>
     <!-- Header -->
@@ -23,17 +23,23 @@
             </div>
 
             <div class="status-bar">
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="en" title="English">
+                        <img src="/static/img/united_states.png" alt="US Flag" class="flag-img">
+                        <span class="lang-text">EN</span>
+                    </button>
+                    <button class="lang-btn" data-lang="de" title="Deutsch">
+                        <img src="/static/img/germany.png" alt="German Flag" class="flag-img">
+                        <span class="lang-text">DE</span>
+                    </button>
+                </div>
                 <div class="status-item">
                     <div class="live-indicator"></div>
-                    <span>Live</span>
+                    <span data-key="live">Live</span>
                 </div>
                 <div class="status-item">
                     <i class="fas fa-clock"></i>
                     <span id="current-time"></span>
-                </div>
-                <div class="status-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span id="fps">0 FPS</span>
                 </div>
             </div>
         </div>
@@ -45,7 +51,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value" style="color: #00ff88 !important;" id="frame-count">0</div>
-                <div class="stat-label">Frames Processed</div>
+                <div class="stat-label" data-key="frames-processed">Frames Processed</div>
                 <div class="stat-detail" id="uptime">Uptime: 0h 0m</div>
             </div>
 
@@ -63,19 +69,19 @@
 
             <div class="stat-card">
                 <div class="stat-value" style="color: #00ff88 !important;" id="total-detections">0</div>
-                <div class="stat-label">Total Detections</div>
+                <div class="stat-label" data-key="total-detections">Total Detections</div>
                 <div class="stat-detail" id="detection-rate">0/h</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-value" style="color: #ff0040 !important;" id="sms-count">0</div>
-                <div class="stat-label">SMS Alerts</div>
+                <div class="stat-label" data-key="sms-alerts">SMS Alerts</div>
                 <div class="stat-detail" id="last-sms">-</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-value" style="color: #ff6600 !important;" id="sms-cost">0.00€</div>
-                <div class="stat-label">SMS Costs</div>
+                <div class="stat-label" data-key="sms-costs">SMS Costs</div>
                 <div class="stat-detail" id="cost-per-sms">-</div>
             </div>
         </div>
@@ -85,11 +91,15 @@
             <!-- Video Container -->
             <div class="video-container">
                 <div class="video-header">
-                    <h2>Live Detection Feed</h2>
+                    <h2 data-key="live-detection-feed">Live Detection Feed</h2>
                     <div class="video-controls">
-                        <div class="live-badge">● LIVE</div>
+                        <div class="fps-display">
+                            <i class="fas fa-chart-line"></i>
+                            <span id="fps">0 FPS</span>
+                        </div>
+                        <div class="live-badge">● <span data-key="live">LIVE</span></div>
                         <button class="fullscreen-btn" onclick="toggleFullscreen()">
-                            <i class="fas fa-expand"></i> Fullscreen
+                            <i class="fas fa-expand"></i> <span data-key="fullscreen">Fullscreen</span>
                         </button>
                     </div>
                 </div>
@@ -99,7 +109,7 @@
             <!-- Detection Log -->
             <div class="detection-log">
                 <div class="log-header">
-                    <h3><i class="fas fa-list"></i> Detection Log</h3>
+                    <h3><i class="fas fa-list"></i> <span data-key="detection-log">Detection Log</span></h3>
                 </div>
                 <div class="log-content" id="log-content">
                     <!-- Logs will be inserted here -->
@@ -122,19 +132,19 @@
         <div class="system-info">
             <div class="system-stat">
                 <div class="system-value" id="cpu-temp">0°C</div>
-                <div class="system-label">CPU Temp</div>
+                <div class="system-label" data-key="cpu-temp">CPU Temp</div>
             </div>
             <div class="system-stat">
                 <div class="system-value" id="cpu-usage">0%</div>
-                <div class="system-label">CPU Usage</div>
+                <div class="system-label" data-key="cpu-usage">CPU Usage</div>
             </div>
             <div class="system-stat">
                 <div class="system-value" id="ram-usage">0%</div>
-                <div class="system-label">RAM Usage</div>
+                <div class="system-label" data-key="ram-usage">RAM Usage</div>
             </div>
             <div class="system-stat">
                 <div class="system-value" id="uptime-sys">0h 0m</div>
-                <div class="system-label">Uptime</div>
+                <div class="system-label" data-key="uptime">Uptime</div>
             </div>
         </div>
     </div>
@@ -147,23 +157,20 @@
                 <span class="company-name">Zeise Digital</span>
             </div>
             <div class="footer-text">
-                <p>Professional Web Development & Digital Solutions</p>
-                <p class="footer-tagline">Crafting innovative digital experiences with clean, smart design</p>
+                <p data-key="footer-headline">Modern & Effective Apps for Your Business</p>
+                <p class="footer-tagline" data-key="footer-tagline">Empowering companies to thrive in the digital landscape through innovative solutions</p>
             </div>
             <div class="footer-links">
                 <a href="mailto:info@zeisedigital.com" class="footer-link">
-                    <i class="fas fa-envelope"></i> Contact
+                    <i class="fas fa-envelope"></i> <span data-key="contact">Contact</span>
                 </a>
                 <a href="https://zeisedigital.com" class="footer-link" target="_blank">
-                    <i class="fas fa-globe"></i> Visit Website
+                    <i class="fas fa-globe"></i> <span data-key="visit-website">Visit Website</span>
                 </a>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Zeise Digital - Powered by VespAI Technology</p>
-        </div>
     </footer>
 
-    <script src="/static/js/dashboard.js?v=2025081404"></script>
+    <script src="/static/js/dashboard.js?t={{ timestamp }}"></script>
 </body>
 </html>

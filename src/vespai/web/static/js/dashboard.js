@@ -1,11 +1,97 @@
 // VespAI Dashboard JavaScript
 // Author: Jakob Zeise (Zeise Digital)
 
+// Translations
+const translations = {
+    en: {
+        'live': 'Live',
+        'frames-processed': 'Frames Processed',
+        'total-detections': 'Total Detections',
+        'sms-alerts': 'SMS Alerts',
+        'sms-costs': 'SMS Costs',
+        'live-detection-feed': 'Live Detection Feed',
+        'fullscreen': 'Fullscreen',
+        'detection-log': 'Detection Log',
+        'cpu-temp': 'CPU Temp',
+        'cpu-usage': 'CPU Usage',
+        'ram-usage': 'RAM Usage',
+        'uptime': 'Uptime',
+        'contact': 'Contact',
+        'visit-website': 'Visit Website',
+        'footer-headline': 'Modern & Effective Apps for Your Business',
+        'footer-tagline': 'Empowering companies to thrive in the digital landscape through innovative solutions',
+        'chart-title-24h': 'Detections per Hour (Last 24h)',
+        'chart-title-4h': 'Detections per 4-Hour Block (Last 24h)',
+        'asian-hornet': 'Asian Hornet',
+        'european-hornet': 'European Hornet'
+    },
+    de: {
+        'live': 'Live',
+        'frames-processed': 'Frames Verarbeitet',
+        'total-detections': 'Gesamt Erkennungen',
+        'sms-alerts': 'SMS Alerts',
+        'sms-costs': 'SMS Kosten',
+        'live-detection-feed': 'Live Erkennungs-Feed',
+        'fullscreen': 'Vollbild',
+        'detection-log': 'Erkennungsprotokoll',
+        'cpu-temp': 'CPU Temperatur',
+        'cpu-usage': 'CPU Auslastung',
+        'ram-usage': 'RAM Auslastung',
+        'uptime': 'Laufzeit',
+        'contact': 'Kontakt',
+        'visit-website': 'Website Besuchen',
+        'footer-headline': 'Moderne & Effektive Apps für Ihr Unternehmen',
+        'footer-tagline': 'Wir unterstützen Unternehmen dabei, in der digitalen Landschaft durch innovative Lösungen zu gedeihen',
+        'chart-title-24h': 'Erkennungen pro Stunde (Letzte 24h)',
+        'chart-title-4h': 'Erkennungen pro 4-Stunden-Block (Letzte 24h)',
+        'asian-hornet': 'Asiatische Hornisse',
+        'european-hornet': 'Europäische Hornisse'
+    }
+};
+
+// Current language
+let currentLang = localStorage.getItem('vespai-language') || 'en';
+
 // Custom orange neon cursor
 let cursor = null;
 
+// Translation functions
+function translatePage() {
+    const elements = document.querySelectorAll('[data-key]');
+    elements.forEach(element => {
+        const key = element.getAttribute('data-key');
+        if (translations[currentLang] && translations[currentLang][key]) {
+            element.textContent = translations[currentLang][key];
+        }
+    });
+    
+    // Update language buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-lang') === currentLang) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+function switchLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('vespai-language', lang);
+    translatePage();
+}
+
 // Initialize custom cursor (only on desktop)
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize language
+    translatePage();
+    
+    // Add language switch event listeners
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            switchLanguage(lang);
+        });
+    });
     // Check if this is a mobile/touch device
     const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 640;
     
@@ -119,9 +205,13 @@ function updateLog(logData) {
         if (!logMap.has(entryId)) {
             const logEntry = document.createElement('div');
             logEntry.className = `log-entry new ${entry.species}` + (entry.frame_id ? ' clickable' : '');
+            const speciesText = entry.species === 'velutina' ? 
+                (translations[currentLang]['asian-hornet'] || 'Asian Hornet') : 
+                (translations[currentLang]['european-hornet'] || 'European Hornet');
+            
             logEntry.innerHTML = `
                 <div class="log-time"><i class="fas fa-clock"></i> ${entry.timestamp || 'Unknown time'}</div>
-                <div>${entry.species === 'velutina' ? 'Asian Hornet' : 'European Hornet'} detected (${entry.confidence || 'Unknown'}%)</div>
+                <div>${speciesText} detected (${entry.confidence || 'Unknown'}%)</div>
             `;
             logEntry.dataset.id = entryId;
             if (entry.frame_id) {
@@ -267,12 +357,12 @@ function updateStats() {
                 
                 if (!chartData) return;
                 
-                // Update chart title based on view
+                // Update chart title based on view and language
                 const titleElement = document.querySelector('.chart-title-text');
                 if (titleElement) {
-                    titleElement.textContent = isMobile ? 
-                        'Detections per 4-Hour Block (Last 24h)' : 
-                        'Detections per Hour (Last 24h)';
+                    const titleKey = isMobile ? 'chart-title-4h' : 'chart-title-24h';
+                    titleElement.textContent = translations[currentLang][titleKey] || 
+                        (isMobile ? 'Detections per 4-Hour Block (Last 24h)' : 'Detections per Hour (Last 24h)');
                 }
                 
                 const maxVal = Math.max(...chartData.map(h => h.total), 1);
@@ -325,6 +415,13 @@ function showDetectionFrame(frameId) {
     window.open(frameUrl, '_blank');
 }
 
-// Update stats every 2 seconds
-setInterval(updateStats, 2000);
+// Update stats every 5 seconds (further reduced for better performance)
+let statsInterval = setInterval(updateStats, 5000);
 updateStats();
+
+// Prevent multiple intervals from running
+window.addEventListener('beforeunload', function() {
+    if (statsInterval) {
+        clearInterval(statsInterval);
+    }
+});
