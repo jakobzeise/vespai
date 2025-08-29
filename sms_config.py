@@ -9,7 +9,7 @@ This file contains SMS settings that can be tracked in the repository.
 # SMS Configuration
 SMS_CONFIG = {
     # Target phone number for SMS alerts
-    "phone_number": "",  # Set your phone number here, e.g., "+491234567890"
+    "phone_number": "+41793484504",  # Set your phone number here, e.g., "+491234567890"
     
     # SMS sender name (appears on SMS)
     "sender_name": "VespAI",

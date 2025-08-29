@@ -17,7 +17,7 @@ CONFIG = {
     'enable_motion': True,
     'enable_sms': True,
     'resolution': '720p',
-    'confidence': 0.7,
+    'confidence': 0.85,
     'save_detections': True,
     'debug_mode': False,
 }
