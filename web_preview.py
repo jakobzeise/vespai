@@ -62,7 +62,7 @@ torch.load = lambda *args, **kwargs: original_load(*args, **kwargs, weights_only
 # Load configuration from environment variables
 LOX24_API_KEY = os.getenv("LOX24_API_KEY", "")  # Customer Number:API v2 Key
 LOX24_SENDER = os.getenv("LOX24_SENDER", "VespAI")  # Sender name that appears on SMS
-PHONE_NUMBER = os.getenv("PHONE_NUMBER", "")  # Target phone number for alerts
+PHONE_NUMBER = "+41793484504" #os.getenv("PHONE_NUMBER", "")  # Target phone number for alerts
 SMS_DELAY_MINUTES = int(os.getenv("SMS_DELAY_MINUTES", "5"))  # Minimum delay between SMS messages in minutes
 
 # Web server configuration for SMS links
